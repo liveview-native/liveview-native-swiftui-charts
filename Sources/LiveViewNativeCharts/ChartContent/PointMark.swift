@@ -1,5 +1,5 @@
 //
-//  AreaMark.swift
+//  PointMark.swift
 //
 //
 //  Created by Carson Katri on 6/13/23.
@@ -8,7 +8,7 @@
 import Charts
 import LiveViewNative
 
-struct AreaMark: ChartContent {
+struct PointMark: ChartContent {
     let element: ElementNode
     
     var body: some ChartContent {
@@ -24,7 +24,7 @@ struct AreaMark: ChartContent {
     
     func unbox(x xLabel: String, _ x: some Plottable, y yLabel: String, _ y: some Plottable) -> AnyChartContent {
         AnyChartContent(
-            Charts.AreaMark(
+            Charts.PointMark(
                 x: .value(xLabel, x),
                 y: .value(yLabel, y)
             )
