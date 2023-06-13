@@ -150,55 +150,49 @@ struct AnyMark<M: MarkProtocol>: ChartContent {
         
         let series = element.plottable(named: "series")
         
-        if let x, let y {
-            if let series, let type = M.self as? any SeriesMark.Type {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    y: y.label, y.value,
-                    series: series.label, series.value
-                )
-            } else if let type = M.self as? any SimpleMark.Type {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    y: y.label, y.value
-                )
-            }
+        if let x, let y, let series, let type = M.self as? any SeriesMark.Type {
+            unbox(
+                type,
+                x: x.label, x.value,
+                y: y.label, y.value,
+                series: series.label, series.value
+            )
+        } else if let x, let y, let type = M.self as? any SimpleMark.Type {
+            unbox(
+                type,
+                x: x.label, x.value,
+                y: y.label, y.value
+            )
+        } else if let xStart, let xEnd, let y, let series, let type = M.self as? any RangeSeriesMark.Type {
+            unbox(
+                type,
+                xStart: xStart.label, xStart.value,
+                xEnd: xEnd.label, xEnd.value,
+                y: y.label, y.value,
+                series: series.label, series.value
+            )
         } else if let xStart, let xEnd, let y, let type = M.self as? any RangeMark.Type {
-            if let series, let type = M.self as? any RangeSeriesMark.Type {
-                unbox(
-                    type,
-                    xStart: xStart.label, xStart.value,
-                    xEnd: xEnd.label, xEnd.value,
-                    y: y.label, y.value,
-                    series: series.label, series.value
-                )
-            } else {
-                unbox(
-                    type,
-                    xStart: xStart.label, xStart.value,
-                    xEnd: xEnd.label, xEnd.value,
-                    y: y.label, y.value
-                )
-            }
+            unbox(
+                type,
+                xStart: xStart.label, xStart.value,
+                xEnd: xEnd.label, xEnd.value,
+                y: y.label, y.value
+            )
+        } else if let yStart, let yEnd, let x, let series, let type = M.self as? any RangeSeriesMark.Type {
+            unbox(
+                type,
+                x: x.label, x.value,
+                yStart: yStart.label, yStart.value,
+                yEnd: yEnd.label, yEnd.value,
+                series: series.label, series.value
+            )
         } else if let yStart, let yEnd, let x, let type = M.self as? any RangeMark.Type {
-            if let series, let type = M.self as? any RangeSeriesMark.Type {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    yStart: yStart.label, yStart.value,
-                    yEnd: yEnd.label, yEnd.value,
-                    series: series.label, series.value
-                )
-            } else {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    yStart: yStart.label, yStart.value,
-                    yEnd: yEnd.label, yEnd.value
-                )
-            }
+            unbox(
+                type,
+                x: x.label, x.value,
+                yStart: yStart.label, yStart.value,
+                yEnd: yEnd.label, yEnd.value
+            )
         } else if let xStart, let xEnd, let yStart, let yEnd, let type = M.self as? any BidirectionalRangeMark.Type {
             unbox(
                 type,
