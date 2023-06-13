@@ -47,11 +47,11 @@ struct ForegroundStyleModifier: ContentModifier {
         in context: Builder.Context<R>
     ) -> Builder.Content {
         if let primary {
-            content.foregroundStyle(primary)
+            return content.foregroundStyle(primary)
         } else if let value {
-            unbox(content: content, label: value.label, value.value)
+            return unbox(content: content, label: value.label, value.value)
         } else {
-            content
+            return content
         }
     }
     
