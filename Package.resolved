@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "liveview-native-core-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/liveviewnative/liveview-native-core-swift.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ffea1b5ff768fd2eeea5d4bdfae606b18517f880"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+        "version" : "1.2.2"
+      }
+    },
+    {
+      "identity" : "swiftphoenixclient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/davidstump/SwiftPhoenixClient.git",
+      "state" : {
+        "revision" : "613989bf2e562d8a851ea83741681c3439353b45",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "0e96a20ffd37a515c5c963952d4335c89bed50a6",
+        "version" : "2.6.0"
+      }
+    }
+  ],
+  "version" : 2
+}

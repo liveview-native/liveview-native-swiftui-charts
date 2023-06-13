@@ -1,7 +1,7 @@
 import XCTest
-@testable import liveview_native_swiftui_charts
+@testable import LiveViewNativeCharts
 
-final class liveview_native_swiftui_chartsTests: XCTestCase {
+final class LiveViewNativeChartsTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest
