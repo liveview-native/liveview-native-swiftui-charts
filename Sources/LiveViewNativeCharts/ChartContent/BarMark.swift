@@ -67,9 +67,6 @@ import LiveViewNative
 @_documentation(visibility: public)
 #endif
 extension BarMark: SimpleMark {
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
     init<X, Y>(element: ElementNode, x: PlottableValue<X>, y: PlottableValue<Y>) where X : Plottable, Y : Plottable {
         self.init(
             x: x,

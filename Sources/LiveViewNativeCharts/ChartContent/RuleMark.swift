@@ -45,9 +45,6 @@ import LiveViewNative
 @_documentation(visibility: public)
 #endif
 extension RuleMark: RangeMark {
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
     init<X, Y>(element: ElementNode, xStart: PlottableValue<X>, xEnd: PlottableValue<X>, y: PlottableValue<Y>) where X : Plottable, Y : Plottable {
         self.init(xStart: xStart, xEnd: xEnd, y: y)
     }
