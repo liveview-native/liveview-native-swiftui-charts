@@ -9,6 +9,32 @@ import Charts
 import SwiftUI
 import LiveViewNative
 
+/// Displays data with foreground colors.
+///
+/// Use this modifier to use a unique color for different categories on the same mark.
+///
+/// ```html
+/// <BarMark
+///   x={item.profit}
+///   x:label="Profit"
+///
+///   modifiers={@native |> foreground_style(value: {"Product", item.product})}
+/// />
+/// ```
+///
+/// Alternatively, provide a `ShapeStyle` to set the color of a mark directly.
+///
+/// ```html
+/// <RuleMark
+///   y={item.min_height}
+///   y:label="Minimum Height"
+///
+///   modifiers={@native |> foreground_style(primary: {:color, :red})}
+/// />
+/// ```
+#if swift(>=5.8)
+@_documentation(visibility: public)
+#endif
 struct ForegroundStyleModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     

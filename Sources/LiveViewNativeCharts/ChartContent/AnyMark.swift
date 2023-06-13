@@ -11,6 +11,7 @@ import LiveViewNative
 
 protocol MarkProtocol: ChartContent {}
 
+/// A mark that displays x/y values.
 protocol SimpleMark: MarkProtocol {
     init<X, Y>(
         element: ElementNode,
@@ -18,6 +19,7 @@ protocol SimpleMark: MarkProtocol {
     ) where X : Plottable, Y : Plottable
 }
 
+/// A mark that displays a range along the x or y axis.
 protocol RangeMark: MarkProtocol {
     init<X, Y>(
         element: ElementNode,
@@ -53,6 +55,7 @@ protocol RangeFixedMark: MarkProtocol {
     ) where Y : Plottable
 }
 
+/// A mark that displays a range along the x and y axis.
 protocol BidirectionalRangeMark: MarkProtocol {
     init<X, Y>(
         element: ElementNode,
@@ -61,6 +64,7 @@ protocol BidirectionalRangeMark: MarkProtocol {
     ) where X : Plottable, Y : Plottable
 }
 
+/// A mark that displays a range along the x and y axis with one axis using a constant.
 protocol FixedBidirectionalRangeMark: MarkProtocol {
     init<X>(
         element: ElementNode,
@@ -75,6 +79,7 @@ protocol FixedBidirectionalRangeMark: MarkProtocol {
     ) where Y : Plottable
 }
 
+/// A mark that displays x/y values and a series.
 protocol SeriesMark: MarkProtocol {
     init<X, Y, S>(
         element: ElementNode,
@@ -82,6 +87,7 @@ protocol SeriesMark: MarkProtocol {
     ) where X : Plottable, Y : Plottable, S : Plottable
 }
 
+/// A mark that displays range values and a series.
 protocol RangeSeriesMark: MarkProtocol {
     init<X, Y, S>(
         element: ElementNode,
@@ -93,6 +99,7 @@ protocol RangeSeriesMark: MarkProtocol {
     ) where X : Plottable, Y : Plottable, S : Plottable
 }
 
+/// A mark with fixed x or y values.
 protocol FixedMark: MarkProtocol {
     init<X>(
         element: ElementNode,
@@ -104,6 +111,9 @@ protocol FixedMark: MarkProtocol {
     ) where Y : Plottable
 }
 
+/// A type that evaluates a mark given an element.
+///
+/// The mark is evaluated based on the attributes used, and its conformance to a refined `MarkProtocol`.
 struct AnyMark<M: MarkProtocol>: ChartContent {
     let element: ElementNode
     
@@ -140,55 +150,49 @@ struct AnyMark<M: MarkProtocol>: ChartContent {
         
         let series = element.plottable(named: "series")
         
-        if let x, let y {
-            if let series, let type = M.self as? any SeriesMark.Type {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    y: y.label, y.value,
-                    series: series.label, series.value
-                )
-            } else if let type = M.self as? any SimpleMark.Type {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    y: y.label, y.value
-                )
-            }
+        if let x, let y, let series, let type = M.self as? any SeriesMark.Type {
+            unbox(
+                type,
+                x: x.label, x.value,
+                y: y.label, y.value,
+                series: series.label, series.value
+            )
+        } else if let x, let y, let type = M.self as? any SimpleMark.Type {
+            unbox(
+                type,
+                x: x.label, x.value,
+                y: y.label, y.value
+            )
+        } else if let xStart, let xEnd, let y, let series, let type = M.self as? any RangeSeriesMark.Type {
+            unbox(
+                type,
+                xStart: xStart.label, xStart.value,
+                xEnd: xEnd.label, xEnd.value,
+                y: y.label, y.value,
+                series: series.label, series.value
+            )
         } else if let xStart, let xEnd, let y, let type = M.self as? any RangeMark.Type {
-            if let series, let type = M.self as? any RangeSeriesMark.Type {
-                unbox(
-                    type,
-                    xStart: xStart.label, xStart.value,
-                    xEnd: xEnd.label, xEnd.value,
-                    y: y.label, y.value,
-                    series: series.label, series.value
-                )
-            } else {
-                unbox(
-                    type,
-                    xStart: xStart.label, xStart.value,
-                    xEnd: xEnd.label, xEnd.value,
-                    y: y.label, y.value
-                )
-            }
+            unbox(
+                type,
+                xStart: xStart.label, xStart.value,
+                xEnd: xEnd.label, xEnd.value,
+                y: y.label, y.value
+            )
+        } else if let yStart, let yEnd, let x, let series, let type = M.self as? any RangeSeriesMark.Type {
+            unbox(
+                type,
+                x: x.label, x.value,
+                yStart: yStart.label, yStart.value,
+                yEnd: yEnd.label, yEnd.value,
+                series: series.label, series.value
+            )
         } else if let yStart, let yEnd, let x, let type = M.self as? any RangeMark.Type {
-            if let series, let type = M.self as? any RangeSeriesMark.Type {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    yStart: yStart.label, yStart.value,
-                    yEnd: yEnd.label, yEnd.value,
-                    series: series.label, series.value
-                )
-            } else {
-                unbox(
-                    type,
-                    x: x.label, x.value,
-                    yStart: yStart.label, yStart.value,
-                    yEnd: yEnd.label, yEnd.value
-                )
-            }
+            unbox(
+                type,
+                x: x.label, x.value,
+                yStart: yStart.label, yStart.value,
+                yEnd: yEnd.label, yEnd.value
+            )
         } else if let xStart, let xEnd, let yStart, let yEnd, let type = M.self as? any BidirectionalRangeMark.Type {
             unbox(
                 type,

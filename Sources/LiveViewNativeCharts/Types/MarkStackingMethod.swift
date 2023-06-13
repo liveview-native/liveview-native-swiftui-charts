@@ -9,6 +9,13 @@ import Charts
 import LiveViewNative
 import LiveViewNativeCore
 
+/// The way marks are stacked.
+///
+/// Possible values:
+/// * `standard`
+/// * `normalized`
+/// * `center`
+/// * `unstacked`
 extension MarkStackingMethod: AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value

@@ -9,7 +9,67 @@ import Charts
 import SwiftUI
 import LiveViewNative
 
+/// A mark that displays a vertical or horizontal bar.
+///
+/// Use the `x` and `y` attributes to create a simple vertical bar.
+///
+/// ```html
+/// <BarMark
+///   x={item.date}
+///   x:label="Date"
+///
+///   y={item.profit}
+///   y:label="Profit"
+/// />
+/// ```
+///
+/// Provide only the `x` or `y` attribute with a label to create a stacked 1D bar.
+///
+/// - Note: If a label is not provided, a value is assumed to be a fixed size.
+///
+/// ```html
+/// <BarMark
+///   x={item.profit}
+///   x:label="Profit"
+///
+///   modifiers={@native |> foreground_style(value: {"Product", item.product})}
+/// />
+/// ```
+///
+/// - Note: The example above uses the ``ForegroundStyleModifier`` modifier to represent categories with colors.
+///
+/// Use the `x-start`/`x-end` or `y-start`/`y-end` attributes to create an interval bar.
+///
+/// ```html
+/// <BarMark
+///   x-start={item.start}
+///   x-start:label="Start Time"
+///
+///   x-end={item.end}
+///   x-end:label="End Time"
+///
+///   y={item.job}
+///   y:label="Job"
+/// />
+/// ```
+///
+/// ## Attributes
+/// * `x`
+/// * `y`
+/// * `x-start`
+/// * `x-end`
+/// * `y-start`
+/// * `y-end`
+/// * `width` - The bar width as a ``LiveViewNativeCharts/Charts/MarkDimension``
+/// * `height` - The bar height as a ``LiveViewNativeCharts/Charts/MarkDimension``
+/// * `stacking` - The ``LiveViewNativeCharts/Charts/MarkStackingMethod``
+#if swift(>=5.8)
+@_documentation(visibility: public)
+#endif
 extension BarMark: SimpleMark {
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
     init<X, Y>(element: ElementNode, x: PlottableValue<X>, y: PlottableValue<Y>) where X : Plottable, Y : Plottable {
         self.init(
             x: x,
