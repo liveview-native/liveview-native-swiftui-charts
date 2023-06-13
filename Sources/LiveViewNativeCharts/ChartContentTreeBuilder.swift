@@ -34,22 +34,12 @@ struct ChartContentTreeBuilder<R: RootRegistry> {
     }
     
     fileprivate func fromElement(_ element: ElementNode, context: LiveContextStorage<R>) -> some ChartContent {
-        let content = Self.lookup(element)
+        let content = ChartElementRegistry<R>.lookup(element, context: context)
         let modifiers: [ModifierContainer<R>] = element.attributeValue(for: "modifiers")
             .flatMap({ try? makeJSONDecoder().decode([ModifierContainer<R>].self, from: Data($0.utf8)) })
             ?? []
         return content
             .applyModifiers(modifiers[...])
-    }
-    
-    @ChartContentBuilder
-    static func lookup(_ node: ElementNode) -> some ChartContent {
-        switch node.tag {
-        case "BarMark":
-            BarMark<R>(element: node)
-        default:
-            fatalError(ChartError.unknownTag(node.tag).localizedDescription)
-        }
     }
 }
 
