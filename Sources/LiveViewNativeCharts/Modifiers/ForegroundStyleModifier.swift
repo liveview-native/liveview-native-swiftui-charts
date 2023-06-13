@@ -6,21 +6,30 @@
 //
 
 import Charts
+import SwiftUI
 import LiveViewNative
 
 struct ForegroundStyleModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
-    let value: AnyPlottableValue
+    let value: AnyPlottableValue?
+    let primary: AnyShapeStyle?
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        func unbox(_ v: some Plottable) -> AnyChartContent {
-            AnyChartContent(content.foregroundStyle(by: .value(value.label, v)))
+        if let primary {
+            content.foregroundStyle(primary)
+        } else if let value {
+            unbox(content: content, label: value.label, value.value)
+        } else {
+            content
         }
-        return unbox(value.value)
+    }
+    
+    func unbox(content: Builder.Content, label: String, _ v: some Plottable) -> AnyChartContent {
+        AnyChartContent(content.foregroundStyle(by: .value(label, v)))
     }
 }
