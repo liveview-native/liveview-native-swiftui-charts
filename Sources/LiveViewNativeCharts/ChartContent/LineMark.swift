@@ -8,26 +8,14 @@
 import Charts
 import LiveViewNative
 
-struct LineMark: ChartContent {
-    let element: ElementNode
-    
-    var body: some ChartContent {
-        if let (xLabel, x) = element.plottable(named: "x"),
-           let (yLabel, y) = element.plottable(named: "y")
-        {
-            unbox(
-                x: xLabel, x,
-                y: yLabel, y
-            )
-        }
+extension LineMark: SimpleMark {
+    init<X, Y>(element: ElementNode, x: PlottableValue<X>, y: PlottableValue<Y>) where X : Plottable, Y : Plottable {
+        self.init(x: x, y: y)
     }
-    
-    func unbox(x xLabel: String, _ x: some Plottable, y yLabel: String, _ y: some Plottable) -> AnyChartContent {
-        AnyChartContent(
-            Charts.LineMark(
-                x: .value(xLabel, x),
-                y: .value(yLabel, y)
-            )
-        )
+}
+
+extension LineMark: SeriesMark {
+    init<X, Y, S>(element: ElementNode, x: PlottableValue<X>, y: PlottableValue<Y>, series: PlottableValue<S>) where X : Plottable, Y : Plottable, S : Plottable {
+        self.init(x: x, y: y, series: series)
     }
 }

@@ -6,28 +6,21 @@
 //
 
 import Charts
+import SwiftUI
 import LiveViewNative
 
-struct PointMark: ChartContent {
-    let element: ElementNode
-    
-    var body: some ChartContent {
-        if let (xLabel, x) = element.plottable(named: "x"),
-           let (yLabel, y) = element.plottable(named: "y")
-        {
-            unbox(
-                x: xLabel, x,
-                y: yLabel, y
-            )
-        }
+extension PointMark: SimpleMark {
+    init<X, Y>(element: ElementNode, x: PlottableValue<X>, y: PlottableValue<Y>) where X : Plottable, Y : Plottable {
+        self.init(x: x, y: y)
+    }
+}
+
+extension PointMark: FixedMark {
+    init<X>(element: ElementNode, x: PlottableValue<X>, y: CGFloat?) where X : Plottable {
+        self.init(x: x, y: y)
     }
     
-    func unbox(x xLabel: String, _ x: some Plottable, y yLabel: String, _ y: some Plottable) -> AnyChartContent {
-        AnyChartContent(
-            Charts.PointMark(
-                x: .value(xLabel, x),
-                y: .value(yLabel, y)
-            )
-        )
+    init<Y>(element: ElementNode, x: CGFloat?, y: PlottableValue<Y>) where Y : Plottable {
+        self.init(x: x, y: y)
     }
 }
