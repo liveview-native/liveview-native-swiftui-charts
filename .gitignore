@@ -5,10 +5,6 @@
 /*.xcodeproj
 xcuserdata/
 .swiftpm
-docc_build/
-docs/
-tutorial/
-swift-docc-render/
 
 # Elixir
 
