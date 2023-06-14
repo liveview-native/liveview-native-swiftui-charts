@@ -31,7 +31,23 @@ extension ElementNode {
     }
 }
 
-/// A decodable `PlottableValue` argument on a ``ChartModifier``.
+/// A value that can be displayed on a chart.
+///
+/// Plottable values can be created with a tuple, where the first element is the label and the second element is the value.
+///
+/// ```elixir
+/// {"Date", item.date}
+/// {"Count", item.number}
+/// ```
+///
+/// ### Supported Types
+/// The following types can be plot:
+/// * number
+/// * string
+/// * DateTime
+#if swift(>=5.8)
+@_documentation(visibility: public)
+#endif
 struct AnyPlottableValue: Decodable {
     let label: String
     let value: any Plottable

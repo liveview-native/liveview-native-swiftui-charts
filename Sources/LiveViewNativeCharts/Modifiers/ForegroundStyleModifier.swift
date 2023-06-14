@@ -32,13 +32,34 @@ import LiveViewNative
 ///   modifiers={@native |> foreground_style(primary: {:color, :red})}
 /// />
 /// ```
+///
+/// This modifier can also be applied to axis marks.
+///
+/// ```html
+/// <AxisGridLine modifiers={@native |> foreground_style(primary: {:color, :red})} />
+/// ```
+///
+/// ## Arguments
+/// * ``value``
+/// * ``primary``
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
 struct ForegroundStyleModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
+    /// A plottable value used to differentiate elements of the graph.
+    ///
+    /// See ``AnyPlottableValue`` for more details.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
     let value: AnyPlottableValue?
+    
+    /// The ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle`` to apply.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
     let primary: AnyShapeStyle?
     
     func apply<R: RootRegistry>(
@@ -57,5 +78,15 @@ struct ForegroundStyleModifier: ContentModifier {
     
     func unbox(content: Builder.Content, label: String, _ v: some Plottable) -> AnyChartContent {
         AnyChartContent(content.foregroundStyle(by: .value(label, v)))
+    }
+}
+
+extension ForegroundStyleModifier: AxisMarkModifier {
+    func body(content: AnyAxisMark) -> some AxisMark {
+        if let primary {
+            content.foregroundStyle(primary)
+        } else {
+            content
+        }
     }
 }
