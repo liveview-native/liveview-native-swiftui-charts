@@ -16,6 +16,9 @@ struct AxisMarkBuilder: ContentBuilder {
     
     enum TagName: String {
         case axisGridLine = "AxisGridLine"
+        case axisTick = "AxisTick"
+        case axisValue = "AxisValue"
+        case axisValueLabel = "AxisValueLabel"
     }
     
     enum ModifierType: String, Decodable {
@@ -32,6 +35,12 @@ struct AxisMarkBuilder: ContentBuilder {
         switch tag {
         case .axisGridLine:
             return AxisGridLine(element: element).body
+        case .axisTick:
+            return AxisTick(element: element).body
+        case .axisValue:
+            return AxisValue(element: element, context: context).body
+        case .axisValueLabel:
+            return AxisValueLabel(element: element, context: context).body
         }
     }
     
