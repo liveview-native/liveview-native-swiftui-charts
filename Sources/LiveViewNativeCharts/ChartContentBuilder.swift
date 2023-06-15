@@ -15,8 +15,13 @@ struct ChartContentBuilder: ContentBuilder {
     typealias Content = any ChartContent
     
     enum TagName: String {
+        case areaMark = "AreaMark"
         case barMark = "BarMark"
+        case lineMark = "LineMark"
         case plot = "Plot"
+        case pointMark = "PointMark"
+        case rectangleMark = "RectangleMark"
+        case ruleMark = "RuleMark"
     }
     
     enum ModifierType: String, Decodable {
@@ -30,10 +35,20 @@ struct ChartContentBuilder: ContentBuilder {
         context: Context<R>
     ) -> Content {
         switch tag {
+        case .areaMark:
+            return AnyMark<AreaMark>(element: element)
         case .barMark:
-            return BarMark(element: element)
+            return AnyMark<BarMark>(element: element)
+        case .lineMark:
+            return AnyMark<LineMark>(element: element)
         case .plot:
             return Plot<R>(element: element, context: context)
+        case .pointMark:
+            return AnyMark<PointMark>(element: element)
+        case .rectangleMark:
+            return AnyMark<RectangleMark>(element: element)
+        case .ruleMark:
+            return AnyMark<RuleMark>(element: element)
         }
     }
     
