@@ -22,6 +22,14 @@ import LiveViewNativeCore
 /// </AxisMarks>
 /// ```
 ///
+/// Custom views or text can also be displayed. This is especially useful when using ``AxisValue`` elements.
+///
+/// ```html
+/// <AxisValueLabel>
+///   <Image system-name="arrow.up" />
+/// </AxisValueLabel>
+/// ```
+///
 /// ## Attributes
 /// * `centered` - Centers the ticks between two axis values.
 /// * `length` - The length of the ticks.
@@ -31,7 +39,7 @@ import LiveViewNativeCore
 #endif
 struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
     let element: ElementNode
-    let context: LiveContextStorage<R>
+    let context: AxisMarkBuilder.Context<R>
     
     var body: some AxisMark {
         let centered = element.attributeBoolean(for: "centered")
@@ -110,8 +118,8 @@ struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
             case "byte-count", "byte_count":
                 Charts.AxisValueLabel(
                     format: .byteCount(
-                        style: (try? element.attributeValue(for: "style")) ?? .binary,
-                        allowedUnits: (try? element.attributeValue(for: "allowed-units")) ?? .default,
+                        style: (try? element.attributeValue(ByteCountFormatStyle.Style.self, for: "style")) ?? .binary,
+                        allowedUnits: (try? element.attributeValue(ByteCountFormatStyle.Units.self, for: "allowed-units")) ?? .default,
                         spellsOutZero: element.attributeBoolean(for: "spells-out-zero"),
                         includesActualByteCount: element.attributeBoolean(for: "includes-actual-byte-count")
                     ),
@@ -138,7 +146,10 @@ struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
                 horizontalSpacing: horizontalSpacing,
                 verticalSpacing: verticalSpacing
             ) {
-                ViewTreeBuilder<R>().fromNodes(element.children(), context: context)
+                AxisMarkBuilder.buildChildrenViews(
+                    of: element,
+                    in: context
+                )
             }
         }
     }

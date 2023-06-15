@@ -6,6 +6,7 @@
 //
 
 import Charts
+import SwiftUI
 import LiveViewNative
 import LiveViewNativeCore
 
@@ -36,8 +37,8 @@ struct AxisTick: ComposedAxisMark {
     var body: some AxisMark {
         Charts.AxisTick(
             centered: element.attributeBoolean(for: "centered"),
-            length: (try? element.attributeValue(for: "length")) ?? .automatic,
-            stroke: try? element.attributeValue(for: "stroke")
+            length: (try? element.attributeValue(Charts.AxisTick.Length.self, for: "length")) ?? .automatic,
+            stroke: try? element.attributeValue(StrokeStyle.self, for: "stroke")
         )
     }
 }

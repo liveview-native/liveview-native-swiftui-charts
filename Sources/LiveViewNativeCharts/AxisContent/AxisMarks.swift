@@ -44,6 +44,19 @@ import SwiftUI
 /// </AxisMarks>
 /// ```
 ///
+/// Use a loop with ``AxisValue`` elements to create custom marks.
+///
+/// ```html
+/// <AxisMarks>
+///   <%= for item <- 1..10 do %>
+///     <AxisValue value={item}>
+///       <AxisValueLabel>Value: <%= item %></AxisValueLabel>
+///       <AxisTick />
+///     </AxisValue>
+///   <% end %>
+/// </AxisMarks>
+/// ```
+///
 /// ## Attributes
 /// * `preset` - The ``LiveViewNativeCharts/Charts/AxisMarkPreset`` to use.
 /// * `position` - The ``LiveViewNativeCharts/Charts/AxisMarkPosition`` to use.
@@ -120,6 +133,27 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
                 )
             default:
                 fatalError("Unknown format '\(format)'")
+            }
+        } else if element.elementChildren().allSatisfy({ $0.tag == "AxisValue" }) {
+            let children = element.children()
+            let values = children
+                .compactMap {
+                    try? $0.attributes
+                        .first(where: { $0.name == "value" })
+                        .map(Double.init)
+                }
+            Charts.AxisMarks(preset: preset, position: position, values: values) { (value: Charts.AxisValue) in
+                AnyAxisMark(
+                    try! AxisMarkBuilder.build(
+                        children.filter({
+                            (try? $0.attributes
+                                .first(where: { $0.name == "value" })
+                                .map(Double.init))
+                            == value.as(Double.self)
+                        }),
+                        in: context
+                    )
+                )
             }
         } else if !element.children().isEmpty {
             Charts.AxisMarks(preset: preset, position: position, values: values) {
