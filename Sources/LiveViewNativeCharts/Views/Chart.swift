@@ -10,7 +10,7 @@ import LiveViewNative
 import Charts
 
 public struct Chart<R: RootRegistry>: View {
-    @ObservedElement private var element
+    @ObservedElement(observeChildren: true) private var element
     @ContentBuilderContext<R> private var context
     
     public var body: some View {
