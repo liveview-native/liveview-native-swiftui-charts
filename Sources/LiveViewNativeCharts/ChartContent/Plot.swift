@@ -6,20 +6,15 @@
 //
 
 import Charts
-@_spi(LiveViewNative) import LiveViewNative
+import LiveViewNative
 
 struct Plot<R: RootRegistry>: ChartContent {
     let element: ElementNode
-    let context: LiveContextStorage<R>
+    let context: ChartContentBuilder.Context<R>
     
     var body: some ChartContent {
         Charts.Plot {
-            ChartContentTreeBuilder().fromNodes(
-                element.children().filter({
-                    !$0.attributes.contains(where: { $0.name == "template" })
-                }),
-                context: context
-            )
+            AnyChartContent(try! ChartContentBuilder.buildChildren(of: element, in: context))
         }
     }
 }

@@ -24,25 +24,3 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
         }
     }
 }
-
-enum ModifierType: String, Codable {
-    case offset
-    case foregroundStyle = "foreground_style"
-}
-
-enum ModifierRegistry<R: RootRegistry>: ModifierRegistryProtocol {
-    @ChartModifierBuilder
-    static func decodeModifier(_ type: ModifierType, from decoder: Decoder) throws -> some ChartModifier {
-        switch type {
-        case .offset:
-            try OffsetModifier(from: decoder)
-        case .foregroundStyle:
-            try ForegroundStyleModifier(from: decoder)
-        }
-    }
-}
-
-protocol ModifierRegistryProtocol {
-    associatedtype BuiltinModifier: ChartModifier
-    static func decodeModifier(_ type: ModifierType, from decoder: Decoder) throws -> BuiltinModifier
-}

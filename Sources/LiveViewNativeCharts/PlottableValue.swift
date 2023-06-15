@@ -7,7 +7,7 @@
 
 import Charts
 import Foundation
-@_spi(LiveViewNative) import LiveViewNative
+import LiveViewNative
 import LiveViewNativeCore
 
 extension ElementNode {

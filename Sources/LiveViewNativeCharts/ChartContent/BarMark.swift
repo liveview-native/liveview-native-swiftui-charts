@@ -8,7 +8,7 @@
 import Charts
 import LiveViewNative
 
-struct BarMark<R: RootRegistry>: ChartContent {
+struct BarMark: ChartContent {
     let element: ElementNode
     
     var body: some ChartContent {

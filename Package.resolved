@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "liveview-client-swiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/liveview-native/liveview-client-swiftui",
+      "state" : {
+        "branch" : "content-builder",
+        "revision" : "a4d62556ad20d555cd181a1b097f0ec92e720219"
+      }
+    },
+    {
       "identity" : "liveview-native-core-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/liveviewnative/liveview-native-core-swift.git",

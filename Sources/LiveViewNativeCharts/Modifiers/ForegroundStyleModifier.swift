@@ -6,11 +6,18 @@
 //
 
 import Charts
+import LiveViewNative
 
-struct ForegroundStyleModifier: ChartModifier, Decodable {
+struct ForegroundStyleModifier: ContentModifier {
+    typealias Builder = ChartContentBuilder
+    
     let value: AnyPlottableValue
     
-    func body(content: Content) -> some ChartContent {
+    func apply<R: RootRegistry>(
+        to content: Builder.Content,
+        on element: ElementNode,
+        in context: Builder.Context<R>
+    ) -> Builder.Content {
         func unbox(_ v: some Plottable) -> AnyChartContent {
             AnyChartContent(content.foregroundStyle(by: .value(value.label, v)))
         }
