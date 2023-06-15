@@ -146,7 +146,7 @@ struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
                 horizontalSpacing: horizontalSpacing,
                 verticalSpacing: verticalSpacing
             ) {
-                AxisMarkBuilder.buildChildrenViews(
+                AxisMarkBuilder.buildChildViews(
                     of: element,
                     in: context
                 )
