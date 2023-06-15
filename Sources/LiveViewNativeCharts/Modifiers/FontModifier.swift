@@ -7,6 +7,7 @@
 
 import Charts
 import SwiftUI
+import LiveViewNative
 
 // this modifier is created by `liveview-client-swiftui`, and an implementation for Charts is provided here.
 /// Sets the font of an axis mark.
@@ -22,7 +23,9 @@ import SwiftUI
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
-struct FontModifier: AxisMarkModifier, Decodable {
+struct FontModifier: ContentModifier {
+    typealias Builder = AxisMarkBuilder
+    
     /// The font to apply.
     ///
     /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/Font`` for more details.
@@ -30,8 +33,12 @@ struct FontModifier: AxisMarkModifier, Decodable {
     @_documentation(visibility: public)
     #endif
     private let font: Font
-
-    func body(content: Content) -> some AxisMark {
+    
+    func apply<R: RootRegistry>(
+        to content: Builder.Content,
+        on element: ElementNode,
+        in context: Builder.Context<R>
+    ) -> Builder.Content {
         content.font(font)
     }
 }

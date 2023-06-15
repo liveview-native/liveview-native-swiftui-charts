@@ -6,6 +6,7 @@
 //
 
 import Charts
+import SwiftUI
 import LiveViewNative
 
 /// An axis mark that adds grid lines.
@@ -33,7 +34,7 @@ struct AxisGridLine: ComposedAxisMark {
     var body: some AxisMark {
         Charts.AxisGridLine(
             centered: element.attributeBoolean(for: "centered"),
-            stroke: try? element.attributeValue(for: "stroke")
+            stroke: try? element.attributeValue(StrokeStyle.self, for: "stroke")
         )
     }
 }

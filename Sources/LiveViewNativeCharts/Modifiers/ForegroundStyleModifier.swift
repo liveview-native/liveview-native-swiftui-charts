@@ -76,17 +76,25 @@ struct ForegroundStyleModifier: ContentModifier {
         }
     }
     
-    func unbox(content: Builder.Content, label: String, _ v: some Plottable) -> AnyChartContent {
-        AnyChartContent(content.foregroundStyle(by: .value(label, v)))
+    func unbox(content: Builder.Content, label: String, _ v: some Plottable) -> Builder.Content {
+        content.foregroundStyle(by: .value(label, v))
     }
 }
 
-extension ForegroundStyleModifier: AxisMarkModifier {
-    func body(content: AnyAxisMark) -> some AxisMark {
+struct AxisMarkForegroundStyleModifier: ContentModifier {
+    typealias Builder = AxisMarkBuilder
+    
+    let primary: AnyShapeStyle?
+    
+    func apply<R: RootRegistry>(
+        to content: Builder.Content,
+        on element: ElementNode,
+        in context: Builder.Context<R>
+    ) -> Builder.Content {
         if let primary {
-            content.foregroundStyle(primary)
+            return content.foregroundStyle(primary)
         } else {
-            content
+            return content
         }
     }
 }

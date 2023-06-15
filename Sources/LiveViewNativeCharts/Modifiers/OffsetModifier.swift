@@ -32,7 +32,16 @@ import LiveViewNative
 struct OffsetModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
+    /// The horizontal offset
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
     let x: Double?
+    
+    /// The vertical offset.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
     let y: Double?
     
     func apply<R: RootRegistry>(
@@ -44,8 +53,17 @@ struct OffsetModifier: ContentModifier {
     }
 }
 
-extension OffsetModifier: AxisMarkModifier {
-    func body(content: AnyAxisMark) -> some AxisMark {
+struct AxisMarkOffsetModifier: ContentModifier {
+    typealias Builder = AxisMarkBuilder
+    
+    let x: Double?
+    let y: Double?
+    
+    func apply<R: RootRegistry>(
+        to content: Builder.Content,
+        on element: ElementNode,
+        in context: Builder.Context<R>
+    ) -> Builder.Content {
         content.offset(x: x ?? 0, y: y ?? 0)
     }
 }

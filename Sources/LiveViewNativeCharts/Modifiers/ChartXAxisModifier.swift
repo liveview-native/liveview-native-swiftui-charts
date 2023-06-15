@@ -58,8 +58,8 @@ struct ChartXAxisModifier<R: RootRegistry>: ViewModifier, Decodable {
     #endif
     private let content: String?
     
-    @ObservedElement private var element
-    @LiveContext<R> private var context
+    @ObservedElement(observeChildren: true) private var element
+    @ContentBuilderContext<R> private var context
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -72,11 +72,12 @@ struct ChartXAxisModifier<R: RootRegistry>: ViewModifier, Decodable {
             content.chartXAxis(visibility)
         } else if let template = self.content {
             content.chartXAxis {
-                AxisContentTreeBuilder().fromNodes(
-                    element.children().filter({
-                        $0.attributes.contains(where: { $0.name == "template" && $0.value == template })
-                    }),
-                    context: context.storage
+                AnyAxisContent(
+                    try! AxisContentBuilder.buildChildren(
+                        of: element,
+                        forTemplate: template,
+                        in: context
+                    )
                 )
             }
         } else {

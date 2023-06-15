@@ -55,7 +55,7 @@ import SwiftUI
 #endif
 struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
     let element: ElementNode
-    let context: LiveContextStorage<R>
+    let context: AxisContentBuilder.Context<R>
     
     var body: some AxisContent {
         let preset = (try? element.attributeValue(AxisMarkPreset.self, for: "preset")) ?? .automatic
@@ -108,8 +108,8 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
             case "byte-count", "byte_count":
                 Charts.AxisMarks(
                     format: .byteCount(
-                        style: (try? element.attributeValue(for: "style")) ?? .binary,
-                        allowedUnits: (try? element.attributeValue(for: "allowed-units")) ?? .default,
+                        style: (try? element.attributeValue(ByteCountFormatStyle.Style.self, for: "style")) ?? .binary,
+                        allowedUnits: (try? element.attributeValue(ByteCountFormatStyle.Units.self, for: "allowed-units")) ?? .default,
                         spellsOutZero: element.attributeBoolean(for: "spells-out-zero"),
                         includesActualByteCount: element.attributeBoolean(for: "includes-actual-byte-count")
                     ),
@@ -123,11 +123,11 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
             }
         } else if !element.children().isEmpty {
             Charts.AxisMarks(preset: preset, position: position, values: values) {
-                AxisMarkTreeBuilder().fromNodes(
-                    element.children().filter({
-                        !$0.attributes.contains(where: { $0.name == "template" })
-                    }),
-                    context: context
+                AnyAxisMark(
+                    try! AxisMarkBuilder.buildChildren(
+                        of: element,
+                        in: context
+                    )
                 )
             }
         } else {
@@ -392,6 +392,8 @@ extension StrokeStyle: AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value
         else { throw AttributeDecodingError.missingAttribute(Self.self) }
-        self = try makeJSONDecoder().decode(Self.self, from: Data(value.utf8))
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        self = try decoder.decode(Self.self, from: Data(value.utf8))
     }
 }
