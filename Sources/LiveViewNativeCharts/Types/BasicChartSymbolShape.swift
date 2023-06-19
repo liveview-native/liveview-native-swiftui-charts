@@ -8,6 +8,20 @@
 import Charts
 import SwiftUI
 
+/// A primitive chart symbol shape, used with the ``SymbolModifier`` modifier.
+///
+/// Possible values:
+/// * `circle`
+/// * `square`
+/// * `triangle`
+/// * `diamond`
+/// * `pentagon`
+/// * `plus`
+/// * `cross`
+/// * `asterisk`
+#if swift(>=5.8)
+@_documentation(visibility: public)
+#endif
 extension BasicChartSymbolShape: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
