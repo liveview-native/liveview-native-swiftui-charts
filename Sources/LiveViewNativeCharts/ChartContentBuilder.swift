@@ -27,6 +27,7 @@ struct ChartContentBuilder: ContentBuilder {
     enum ModifierType: String, Decodable {
         case foregroundStyle = "foreground_style"
         case offset
+        case symbol
     }
     
     static func lookup<R: RootRegistry>(
@@ -70,6 +71,8 @@ struct ChartContentBuilder: ContentBuilder {
             return try ForegroundStyleModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
+        case .symbol:
+            return try SymbolModifier(from: decoder)
         }
     }
 }
