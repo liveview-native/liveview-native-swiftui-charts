@@ -9,3 +9,5 @@
 ### Axis Modifiers
 - ``ChartXAxisModifier``
 - ``ChartYAxisModifier``
+### Annotating Marks
+- ``AnnotationModifier``
