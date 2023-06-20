@@ -6,7 +6,7 @@
 //
 
 import Charts
-@_spi(LiveViewNative) import LiveViewNative
+import LiveViewNative
 
 /// A value in an ``AxisMarks`` element.
 ///

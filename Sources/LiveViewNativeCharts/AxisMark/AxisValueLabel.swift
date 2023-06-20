@@ -7,7 +7,7 @@
 
 import Charts
 import SwiftUI
-@_spi(LiveViewNative) import LiveViewNative
+import LiveViewNative
 import LiveViewNativeCore
 
 /// An axis mark that adds labels.
