@@ -13,7 +13,7 @@ let package = Package(
             targets: ["LiveViewNativeCharts"]),
     ],
     dependencies: [
-        .package(path: "/Users/carson.katri/Documents/LiveViewNative/Packages/liveview-client-swiftui")
+        .package(url: "https://github.com/liveview-native/liveview-client-swiftui", branch: "content-builder")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
