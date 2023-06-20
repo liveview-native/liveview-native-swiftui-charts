@@ -44,6 +44,19 @@ import SwiftUI
 /// </AxisMarks>
 /// ```
 ///
+/// Use a loop with ``AxisValue`` elements to create custom marks.
+///
+/// ```html
+/// <AxisMarks>
+///   <%= for item <- 1..10 do %>
+///     <AxisValue value={item}>
+///       <AxisValueLabel>Value: <%= item %></AxisValueLabel>
+///       <AxisTick />
+///     </AxisValue>
+///   <% end %>
+/// </AxisMarks>
+/// ```
+///
 /// ## Attributes
 /// * `preset` - The ``LiveViewNativeCharts/Charts/AxisMarkPreset`` to use.
 /// * `position` - The ``LiveViewNativeCharts/Charts/AxisMarkPosition`` to use.
@@ -120,6 +133,27 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
                 )
             default:
                 fatalError("Unknown format '\(format)'")
+            }
+        } else if element.elementChildren().allSatisfy({ $0.tag == "AxisValue" }) {
+            let children = element.children()
+            let values = children
+                .compactMap {
+                    try? $0.attributes
+                        .first(where: { $0.name == "value" })
+                        .map(Double.init)
+                }
+            Charts.AxisMarks(preset: preset, position: position, values: values) { (value: Charts.AxisValue) in
+                AnyAxisMark(
+                    try! AxisMarkBuilder.build(
+                        children.filter({
+                            (try? $0.attributes
+                                .first(where: { $0.name == "value" })
+                                .map(Double.init))
+                            == value.as(Double.self)
+                        }),
+                        in: context
+                    )
+                )
             }
         } else if !element.children().isEmpty {
             Charts.AxisMarks(preset: preset, position: position, values: values) {
@@ -242,50 +276,50 @@ extension AxisMarkPosition: AttributeDecodable {
 /// Possible values:
 /// * `automatic`
 ///   * Additional Attributes
-///     * `values-minimum-stride` (number)
-///     * `values-desired-count` (integer)
-///     * `values-round-lower-bound` (boolean)
-///     * `values-round-upper-bound` (boolean)
+///     * `minimum-stride` (number)
+///     * `desired-count` (integer)
+///     * `round-lower-bound` (boolean)
+///     * `round-upper-bound` (boolean)
 /// * `stride`
 ///   * Additional Attributes
-///     * `values-stride` (number or ``LiveViewNativeCharts/Foundation/Calendar/Component``, required)
-///     * `values-count` (integer)
-///     * `values-round-lower-bound` (boolean)
-///     * `values-round-upper-bound` (boolean)
-///     * `values-calendar` (``LiveViewNativeCharts/Foundation/Calendar/Identifier``)
+///     * `stride` (number or ``LiveViewNativeCharts/Foundation/Calendar/Component``, required)
+///     * `count` (integer)
+///     * `round-lower-bound` (boolean)
+///     * `round-upper-bound` (boolean)
+///     * `calendar` (``LiveViewNativeCharts/Foundation/Calendar/Identifier``)
 extension AxisMarkValues {
     public init?(from element: ElementNode) {
         if let values = element.attributeValue(for: "values") {
             switch values {
             case "automatic":
-                if let minimumStride = try? element.attributeValue(Double.self, for: "values-minimum-stride") {
+                if let minimumStride = try? element.attributeValue(Double.self, for: "minimum-stride") {
                     self = .automatic(
                         minimumStride: minimumStride,
-                        desiredCount: try? element.attributeValue(Int.self, for: "values-desired-count"),
-                        roundLowerBound: element.attributeBoolean(for: "values-round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "values-round-upper-bound")
+                        desiredCount: try? element.attributeValue(Int.self, for: "desired-count"),
+                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
+                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound")
                     )
                 } else {
                     self = .automatic(
-                        desiredCount: try? element.attributeValue(Int.self, for: "values-desired-count"),
-                        roundLowerBound: element.attributeBoolean(for: "values-round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "values-round-upper-bound")
+                        desiredCount: try? element.attributeValue(Int.self, for: "desired-count"),
+                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
+                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound")
                     )
                 }
             case "stride":
-                if let numeric = try? element.attributeValue(Double.self, for: "values-stride") {
+                if let numeric = try? element.attributeValue(Double.self, for: "stride") {
                     self = .stride(
                         by: numeric,
-                        roundLowerBound: element.attributeBoolean(for: "values-round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "values-round-upper-bound")
+                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
+                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound")
                     )
-                } else if let component = try? element.attributeValue(Calendar.Component.self, for: "values-stride") {
+                } else if let component = try? element.attributeValue(Calendar.Component.self, for: "stride") {
                     self = .stride(
                         by: component,
-                        count: (try? element.attributeValue(Int.self, for: "values-count")) ?? 1,
-                        roundLowerBound: element.attributeBoolean(for: "values-round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "values-round-upper-bound"),
-                        calendar: (try? element.attributeValue(Calendar.Identifier.self, for: "values-calendar")).flatMap(Calendar.init(identifier:))
+                        count: (try? element.attributeValue(Int.self, for: "count")) ?? 1,
+                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
+                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound"),
+                        calendar: (try? element.attributeValue(Calendar.Identifier.self, for: "calendar")).flatMap(Calendar.init(identifier:))
                     )
                 }
             default:
