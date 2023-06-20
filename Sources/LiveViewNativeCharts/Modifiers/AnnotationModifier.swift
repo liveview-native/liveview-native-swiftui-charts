@@ -79,7 +79,7 @@ struct AnnotationModifier: ContentModifier {
            let overflowResolution = overflowResolution?.value
         {
             #if swift(>=5.9)
-            content
+            return content
                 .annotation(
                     position: position,
                     alignment: alignment,
@@ -88,9 +88,12 @@ struct AnnotationModifier: ContentModifier {
                 ) {
                     Builder.buildChildViews(of: element, forTemplate: self.content, in: context)
                 }
+            #else
+            let _ = overflowResolution
+            return content
             #endif
         } else {
-            content
+            return content
                 .annotation(
                     position: position,
                     alignment: alignment,
@@ -126,6 +129,7 @@ struct OverflowResolution: Decodable {
     #endif
     
     init(from decoder: Decoder) throws {
+        #if swift(>=5.9)
         var container = try decoder.unkeyedContainer()
         if #available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *) {
             let x = try container.decode(AnnotationOverflowResolution.Strategy.self)
@@ -134,6 +138,9 @@ struct OverflowResolution: Decodable {
         } else {
             throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "AnnotationOverflowResolution is only available on iOS 17, macOS 14, tvOS 17, and watchOS 10 or higher."))
         }
+        #else
+        fatalError()
+        #endif
     }
 }
 
