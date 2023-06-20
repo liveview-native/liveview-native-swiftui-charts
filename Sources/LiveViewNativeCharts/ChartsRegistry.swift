@@ -27,6 +27,8 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
     public enum ModifierType: String {
         case chartXAxis = "chart_x_axis"
         case chartYAxis = "chart_y_axis"
+        case chartXScale = "chart_x_scale"
+        case chartYScale = "chart_y_scale"
     }
     
     public static func decodeModifier(_ type: ModifierType, from decoder: Decoder) throws -> some ViewModifier {
@@ -35,6 +37,10 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
             try ChartXAxisModifier<Root>(from: decoder)
         case .chartYAxis:
             try ChartYAxisModifier<Root>(from: decoder)
+        case .chartXScale:
+            try ChartXScaleModifier(from: decoder)
+        case .chartYScale:
+            try ChartYScaleModifier(from: decoder)
         }
     }
 }
