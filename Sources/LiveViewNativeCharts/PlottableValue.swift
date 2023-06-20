@@ -17,7 +17,7 @@ extension ElementNode {
     /// * Date
     /// * Double
     /// * String
-    func plottable(named: AttributeName) -> (String, any Plottable)? {
+    func plottable(named: AttributeName) -> (label: String, value: any Plottable)? {
         guard let value = self.attributeValue(for: named),
               let label = self.attributeValue(for: .init(namespace: named.rawValue, name: "label"))
         else { return nil }
