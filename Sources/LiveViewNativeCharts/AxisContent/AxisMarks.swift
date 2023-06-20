@@ -6,7 +6,7 @@
 //
 
 import Charts
-@_spi(LiveViewNative) import LiveViewNative
+import LiveViewNative
 import LiveViewNativeCore
 import SwiftUI
 

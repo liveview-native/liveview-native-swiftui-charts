@@ -7,7 +7,7 @@
 
 import Charts
 import SwiftUI
-@_spi(LiveViewNative) import LiveViewNative
+import LiveViewNative
 
 /// Configure the visibility/content of the Y axis.
 ///
