@@ -27,6 +27,7 @@ struct ChartContentBuilder: ContentBuilder {
     enum ModifierType: String, Decodable {
         case foregroundStyle = "foreground_style"
         case offset
+        case opacity
         case symbol
     }
     
@@ -71,6 +72,8 @@ struct ChartContentBuilder: ContentBuilder {
             return try ForegroundStyleModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
+        case .opacity:
+            return try OpacityModifier(from: decoder)
         case .symbol:
             return try SymbolModifier(from: decoder)
         }
