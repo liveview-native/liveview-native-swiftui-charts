@@ -17,8 +17,9 @@ defmodule LiveViewNativeSwiftUiCharts.Modifiers.ChartBackground do
       top_trailing
       trailing
       trailing_first_text_baseline
-    )a
+    )a,
+      default: "center"
 
-    field :content, KeyName, default: nil
+    field :content, KeyName
   end
 end
