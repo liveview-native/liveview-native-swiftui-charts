@@ -12,12 +12,12 @@ import LiveViewNative
 /// Adds a background to a view that contains a chart.
 ///
 /// ```html
-/// <VStack template={:content} modifiers={chart_background(@native, alignment: :center)}>
+/// <Chart template={:content} modifiers={chart_background(@native, alignment: :center)}>
 ///   <chart_background:background>
 ///     <Color name="system-green" />
 ///   </chart_background:background>
-///   <Chart>Chart Content!</Chart>
-/// </VStack>
+///   <BarMark>...</BarMark>
+/// </Chart>
 /// ```
 ///
 /// ## Arguments
@@ -39,7 +39,7 @@ struct ChartBackgroundModifier<R: RootRegistry>: ViewModifier, Decodable {
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
-    let content: String?
+    let content: String
     
     @ObservedElement private var element
     @LiveContext<R> private var context
@@ -53,7 +53,7 @@ struct ChartBackgroundModifier<R: RootRegistry>: ViewModifier, Decodable {
 
     func body(content: Content) -> some View {
         content.chartBackground(alignment: self.alignment) {_ in
-            context.buildChildren(of: element, forTemplate: self.content!)
+            context.buildChildren(of: element, forTemplate: self.content)
         }
     }
 
