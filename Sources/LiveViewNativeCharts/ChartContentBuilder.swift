@@ -25,6 +25,7 @@ struct ChartContentBuilder: ContentBuilder {
     }
     
     enum ModifierType: String, Decodable {
+        case clipShape = "clip_shape"
         case foregroundStyle = "foreground_style"
         case mask
         case offset
@@ -69,6 +70,8 @@ struct ChartContentBuilder: ContentBuilder {
         registry _: R.Type
     ) throws -> any ContentModifier<Self> {
         switch type {
+        case .clipShape:
+            return try ClipShapeModifier(from: decoder)
         case .foregroundStyle:
             return try ForegroundStyleModifier(from: decoder)
         case .mask:
