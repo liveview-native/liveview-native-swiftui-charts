@@ -4,7 +4,7 @@
 
 ## Usage
 
-Add this library as a package to your LiveView Native application's Xcode project using its repo URL. Then, create an `AggregateRegistry` to include the provided `ChartsRegistry` within your native app builds:
+Add this library as a package to your LiveView Native application's Xcode project using its repo URL. Then, create an ``LiveViewNativeCharts/LiveViewNative/AggregateRegistry`` to include the provided ``ChartsRegistry`` within your native app builds:
 
 ```diff
 import SwiftUI
