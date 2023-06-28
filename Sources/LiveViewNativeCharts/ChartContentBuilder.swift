@@ -26,6 +26,7 @@ struct ChartContentBuilder: ContentBuilder {
     
     enum ModifierType: String, Decodable {
         case foregroundStyle = "foreground_style"
+        case interpolationMethod = "interpolation_method"
         case offset
         case symbol
     }
@@ -69,6 +70,8 @@ struct ChartContentBuilder: ContentBuilder {
         switch type {
         case .foregroundStyle:
             return try ForegroundStyleModifier(from: decoder)
+        case .interpolationMethod:
+            return try InterpolationMethodModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
         case .symbol:

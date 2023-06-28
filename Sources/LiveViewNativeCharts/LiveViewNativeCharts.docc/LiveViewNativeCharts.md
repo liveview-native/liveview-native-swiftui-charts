@@ -59,17 +59,17 @@ defmodule MyAppWeb.ChartLive do
   def render(%{platform_id: :swiftui} = assigns) do
     ~Z"""
     <Chart>
-      <%= for item <- @data do %>
-        <BarMark
-          x={item.department}
-          x:label="Department"
+      <BarMark
+        :for={item <- @data}
+        
+        x={item.department}
+        x:label="Department"
 
-          y={item.profit}
-          y:label="Profit"
+        y={item.profit}
+        y:label="Profit"
 
-          modifiers={@native |> foreground_style(value: {"Product Category", item.product_category})}
-        />
-      <% end %>
+        modifiers={@native |> foreground_style(value: {"Product Category", item.product_category})}
+      />
     </Chart>
     """swiftui
   end
