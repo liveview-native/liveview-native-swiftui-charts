@@ -5,6 +5,6 @@ defmodule LiveViewNativeSwiftUiCharts.Modifiers.InterpolationMethod do
     field :method, Ecto.Enum, values: ~w(cardinal catmull_rom linear monotone step_center step_end step_start)a
   end
 
-  def params(method) when is_atom(method), do: [method: method]
+  def params(method) when is_atom(method) and not is_boolean(method) and not is_nil(method), do: [method: method]
   def params(params), do: params
 end

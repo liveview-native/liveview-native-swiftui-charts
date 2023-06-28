@@ -15,10 +15,10 @@ import LiveViewNative
 /// ```html
 /// <LineMark modifiers={interpolation_method(:catmull_rom)} />
 /// <AreaMark modifiers={interpolation_method(:cardinal)} />
+/// ```
 ///
 /// ## Arguments
-/// * ``x``
-/// * ``y``
+/// * ``method``
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
