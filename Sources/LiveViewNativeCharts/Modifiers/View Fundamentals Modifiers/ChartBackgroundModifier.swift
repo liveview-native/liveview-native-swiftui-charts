@@ -12,10 +12,8 @@ import LiveViewNative
 /// Adds a background to a view that contains a chart.
 ///
 /// ```html
-/// <Chart template={:content} modifiers={chart_background(@native, alignment: :center)}>
-///   <chart_background:background>
-///     <Color name="system-green" />
-///   </chart_background:background>
+/// <Chart modifiers={chart_background(alignment: :center, content: :background)}>
+///   <Color name="system-green" template={:background} />
 ///   <BarMark>...</BarMark>
 /// </Chart>
 /// ```
