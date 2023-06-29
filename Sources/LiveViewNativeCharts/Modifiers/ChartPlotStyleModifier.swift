@@ -34,7 +34,7 @@ struct ChartPlotStyleModifier<R: RootRegistry>: ViewModifier, Decodable {
     func body(content: Content) -> some View {
         content
             .chartPlotStyle { content in
-                modifiers.apply(to: content)
+                content.modifier(modifiers)
             }
     }
     
