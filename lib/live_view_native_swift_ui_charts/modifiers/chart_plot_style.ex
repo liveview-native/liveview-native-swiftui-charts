@@ -1,7 +1,7 @@
 defmodule LiveViewNativeSwiftUiCharts.Modifiers.ChartPlotStyle do
   use LiveViewNativePlatform.Modifier
 
-  alias LiveViewNativeSwiftUiCharts.Types.ModifierStack
+  alias LiveViewNativeSwiftUi.Types.ModifierStack
 
   modifier_schema "chart_plot_style" do
     field :modifiers, ModifierStack

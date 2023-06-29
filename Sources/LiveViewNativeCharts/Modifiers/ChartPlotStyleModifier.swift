@@ -29,21 +29,12 @@ struct ChartPlotStyleModifier<R: RootRegistry>: ViewModifier, Decodable {
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
-    private let modifiers: [ModifierContainer<R>]
-    
-    @ObservedElement private var element
-    @LiveContext<R> private var context
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.modifiers = try container.decode([ModifierContainer<R>].self, forKey: .modifiers)
-    }
+    private let modifiers: _ModifierStack<R>
     
     func body(content: Content) -> some View {
         content
             .chartPlotStyle { content in
-                content
-                    ._applyModifiers(modifiers[...], element: element, context: context)
+                modifiers.apply(to: content)
             }
     }
     
