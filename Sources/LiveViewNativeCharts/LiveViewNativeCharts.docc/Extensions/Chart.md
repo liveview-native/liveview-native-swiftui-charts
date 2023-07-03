@@ -9,3 +9,5 @@
 ### Axis Modifiers
 - ``ChartXAxisModifier``
 - ``ChartYAxisModifier``
+### Foreground Style Scale Modifiers
+- ``ChartForegroundStyleScaleModifier``
