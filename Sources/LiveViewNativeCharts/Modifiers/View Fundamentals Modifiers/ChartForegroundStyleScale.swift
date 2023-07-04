@@ -14,7 +14,10 @@ import LiveViewNative
 /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle`` for a list of possible values.
 ///
 /// ```html
-/// <Chart modifiers={chart_foreground_style_scale(mapping: [{:color, :blue}, {:opacity, 0.5}])}>
+/// <Chart modifiers={chart_foreground_style_scale(mapping: %{
+///     "A" => {:color, :blue},
+///     "B" => {:opacity, 0.5}
+/// })}>
 ///   ...
 /// </Chart>
 /// ```
@@ -31,7 +34,7 @@ import LiveViewNative
 ///
 /// The ``range`` of foreground styles that correspond to the scale domain.
 ///
-/// See ``LiveViewNativeCharts/Charts/BasicChartSymbolShape`` for a list of possible values.
+/// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle`` for a list of possible values.
 ///
 /// ```html
 /// <Chart modifiers={chart_foreground_style_scale(range: [:circle, :asterisk, :plus])}>
@@ -61,6 +64,14 @@ struct ChartForegroundStyleScaleModifier: ViewModifier, Decodable {
     /// The ``mapping`` Maps data categories to foreground styles.
     ///
     /// Create a mapping between a string and a ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle``.
+    ///
+    /// ```elixir
+    /// %{
+    ///     "A" => :circle,
+    ///     "B" => :asterisk,
+    ///     "C" => :square
+    /// }
+    /// ```
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
