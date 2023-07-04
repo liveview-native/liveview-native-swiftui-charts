@@ -25,6 +25,7 @@ struct ChartContentBuilder: ContentBuilder {
     }
     
     enum ModifierType: String, Decodable {
+        case annotation
         case foregroundStyle = "foreground_style"
         case offset
         case symbol
@@ -67,6 +68,8 @@ struct ChartContentBuilder: ContentBuilder {
         registry _: R.Type
     ) throws -> any ContentModifier<Self> {
         switch type {
+        case .annotation:
+            return try AnnotationModifier(from: decoder)
         case .foregroundStyle:
             return try ForegroundStyleModifier(from: decoder)
         case .offset:
