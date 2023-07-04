@@ -1,10 +1,10 @@
 defmodule LiveViewNativeSwiftUiCharts.Modifiers.ChartForegroundStyleScale do
   use LiveViewNativePlatform.Modifier
 
-  alias LiveViewNativeSwiftUiCharts.Types.{ScaleDomain, BasicChartSymbolShape, ScaleType}
+  alias LiveViewNativeSwiftUiCharts.Types.{ScaleDomain, ShapeStyle, BasicChartSymbolShape, ScaleType}
 
   modifier_schema "chart_symbol_scale" do
-    field :mapping, {:map, BasicChartSymbolShape}
+    field :mapping, {:map, ShapeStyle}
     field :domain, ScaleDomain
     field :range, {:array, BasicChartSymbolShape}
     field :type, ScaleType

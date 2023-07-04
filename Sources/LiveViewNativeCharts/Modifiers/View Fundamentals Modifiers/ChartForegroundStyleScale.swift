@@ -11,14 +11,10 @@ import LiveViewNative
 
 /// The ``mapping`` Maps data categories to foreground styles.
 ///
-/// See ``LiveViewNativeCharts/Charts/BasicChartSymbolShape`` for a list of possible values.
+/// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle`` for a list of possible values.
 ///
 /// ```html
-/// <Chart modifiers={chart_foreground_style_scale(mapping: %{
-///   "A" => :circle,
-///   "B" => :asterisk,
-///   "C" => :plus
-/// })}>
+/// <Chart modifiers={chart_foreground_style_scale(mapping: [{:color, :blue}, {:opacity, 0.5}])}>
 ///   ...
 /// </Chart>
 /// ```
@@ -64,23 +60,15 @@ import LiveViewNative
 struct ChartForegroundStyleScaleModifier: ViewModifier, Decodable {
     /// The ``mapping`` Maps data categories to foreground styles.
     ///
-    /// Create a mapping between a string and a ``LiveViewNativeCharts/Charts/BasicChartSymbolShape``.
-    ///
-    /// ```elixir
-    /// %{
-    ///     "A" => :circle,
-    ///     "B" => :asterisk,
-    ///     "C" => :square
-    /// }
-    /// ```
+    /// Create a mapping between a string and a ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle``.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
-    private let mapping: [String:BasicChartSymbolShape]?
+    private let mapping: [String:AnyShapeStyle]?
 
     struct Mapping: Decodable {
         let value: String
-        let symbol: BasicChartSymbolShape
+        let symbol: AnyShapeStyle
     }
     
     /// The possible data values plotted as foreground style in the chart.
