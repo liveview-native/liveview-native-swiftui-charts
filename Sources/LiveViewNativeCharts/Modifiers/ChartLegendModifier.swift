@@ -32,11 +32,11 @@ import LiveViewNative
 /// Optionally provide the ``position``, ``alignment``, and ``spacing``.
 ///
 /// ```html
-/// <Chart modifiers={chart_legend(content: :my_legend)}>
+/// <Chart modifiers={chart_legend(position: :leading, content: :my_legend)}>
 ///   ...
-///   <Group template={:my_legend}>
+///   <VStack template={:my_legend}>
 ///     ...
-///   </Group>
+///   </VStack>
 /// </Chart>
 /// ```
 ///
@@ -52,22 +52,23 @@ import LiveViewNative
 struct ChartLegendModifier<R: RootRegistry>: ViewModifier, Decodable {
     /// The visibility of the axis.
     ///
-    /// Possible values:
-    /// * `automatic`
-    /// * `visible`
-    /// * `hidden`
+    /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/Visibility`` for a list of possible values.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
     private let visibility: Visibility?
     
-    /// The position of the legend.
+    /// The position of the legend. Defaults to `automatic`.
+    ///
+    /// See ``LiveViewNativeCharts/Charts/AnnotationPosition`` for a list of possible values.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
     private let position: AnnotationPosition
     
-    /// The alignment of content within the legend.
+    /// The alignment of the legend relative to the chart.
+    ///
+    /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/Alignment`` for a list of possible values.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
@@ -77,7 +78,7 @@ struct ChartLegendModifier<R: RootRegistry>: ViewModifier, Decodable {
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
-    private let spacing: Double?
+    private let spacing: CGFloat?
     
     /// A reference to the element to use as the legend.
     #if swift(>=5.8)
@@ -85,33 +86,27 @@ struct ChartLegendModifier<R: RootRegistry>: ViewModifier, Decodable {
     #endif
     private let content: String?
     
-    @ObservedElement(observeChildren: true) private var element
-    @ContentBuilderContext<R> private var context
+    @ObservedElement private var element
+    @LiveContext<R> private var context
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.visibility = try container.decodeIfPresent(Visibility.self, forKey: .visibility)
         self.position = try container.decode(AnnotationPosition.self, forKey: .position)
         self.alignment = try container.decodeIfPresent(Alignment.self, forKey: .alignment)
-        self.spacing = try container.decodeIfPresent(Double.self, forKey: .spacing)
+        self.spacing = try container.decodeIfPresent(CGFloat.self, forKey: .spacing)
         self.content = try container.decodeIfPresent(String.self, forKey: .content)
     }
     
     func body(content: Content) -> some View {
         if let visibility {
-            content.chartYAxis(visibility)
+            content.chartLegend(visibility)
         } else if let template = self.content {
-            content.chartYAxis {
-                AnyAxisContent(
-                    try! AxisContentBuilder.buildChildren(
-                        of: element,
-                        forTemplate: template,
-                        in: context
-                    )
-                )
+            content.chartLegend(position: position, alignment: alignment, spacing: spacing) {
+                context.buildChildren(of: element, forTemplate: template)
             }
         } else {
-            content
+            content.chartLegend(position: position, alignment: alignment, spacing: spacing)
         }
     }
     
