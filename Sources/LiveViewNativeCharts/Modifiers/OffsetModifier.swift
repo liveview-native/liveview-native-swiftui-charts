@@ -44,12 +44,44 @@ struct OffsetModifier: ContentModifier {
     #endif
     let y: Double?
     
+    /// The vertical offset.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
+    let xStart: Double?
+    
+    /// The vertical offset.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
+    let xEnd: Double?
+    
+    /// The vertical offset.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
+    let yStart: Double?
+    
+    /// The vertical offset.
+    #if swift(>=5.8)
+    @_documentation(visibility: public)
+    #endif
+    let yEnd: Double?
+    
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.offset(x: x ?? 0, y: y ?? 0)
+        if (xStart != nil || xEnd != nil) && (yStart != nil || yEnd != nil) {
+            return content.offset(xStart: xStart ?? 0, xEnd: xEnd ?? 0, yStart: yStart ?? 0, yEnd: yEnd ?? 0)
+        } else if yStart != nil || yEnd != nil {
+            return content.offset(x: x ?? 0, yStart: yStart ?? 0, yEnd: yEnd ?? 0)
+        } else if xStart != nil || xEnd != nil {
+            return content.offset(xStart: xStart ?? 0, xEnd: xEnd ?? 0, y: y ?? 0)
+        } else {
+            return content.offset(x: x ?? 0, y: y ?? 0)
+        }
     }
 }
 

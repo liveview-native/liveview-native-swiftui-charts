@@ -25,8 +25,13 @@ struct ChartContentBuilder: ContentBuilder {
     }
     
     enum ModifierType: String, Decodable {
+        case blur
+        case clipShape = "clip_shape"
         case foregroundStyle = "foreground_style"
+        case mask
         case offset
+        case opacity
+        case shadow
         case symbol
     }
     
@@ -67,10 +72,28 @@ struct ChartContentBuilder: ContentBuilder {
         registry _: R.Type
     ) throws -> any ContentModifier<Self> {
         switch type {
+        case .blur:
+            if #available(iOS 16.4, macOS 13.3, tvOS 16.4, watchOS 9.4, *) {
+                return try BlurModifier(from: decoder)
+            } else {
+                return EmptyContentModifier<Self>()
+            }
+        case .clipShape:
+            return try ClipShapeModifier(from: decoder)
         case .foregroundStyle:
             return try ForegroundStyleModifier(from: decoder)
+        case .mask:
+            return try MaskModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
+        case .opacity:
+            return try OpacityModifier(from: decoder)
+        case .shadow:
+            if #available(iOS 16.4, macOS 13.3, tvOS 16.4, watchOS 9.4, *) {
+                return try ShadowModifier(from: decoder)
+            } else {
+                return EmptyContentModifier<Self>()
+            }
         case .symbol:
             return try SymbolModifier(from: decoder)
         }

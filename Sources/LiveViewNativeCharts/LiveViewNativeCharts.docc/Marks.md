@@ -39,5 +39,11 @@ Each mark supports different values. These attributes are detailed in their docu
 - ``Plot``
 
 ### Modifiers
+- ``BlurModifier``
+- ``ClipShapeModifier``
 - ``ForegroundStyleModifier``
+- ``MaskModifier``
 - ``OffsetModifier``
+- ``OpacityModifier``
+- ``ShadowModifier``
+- ``SymbolModifier``
