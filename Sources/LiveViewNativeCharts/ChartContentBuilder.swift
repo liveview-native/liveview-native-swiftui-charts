@@ -28,6 +28,7 @@ struct ChartContentBuilder: ContentBuilder {
         case foregroundStyle = "foreground_style"
         case offset
         case symbol
+        case zIndex = "z_index"
     }
     
     static func lookup<R: RootRegistry>(
@@ -73,6 +74,12 @@ struct ChartContentBuilder: ContentBuilder {
             return try OffsetModifier(from: decoder)
         case .symbol:
             return try SymbolModifier(from: decoder)
+        case .zIndex:
+            if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
+                return try ZIndexModifier(from: decoder)
+            } else {
+                return EmptyContentModifier()
+            }
         }
     }
 }
