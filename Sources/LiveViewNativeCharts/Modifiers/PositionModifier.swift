@@ -47,7 +47,7 @@ struct PositionModifier: ContentModifier {
     
     /// The total space available for marks.
     ///
-    /// See ``LiveViewNativeCharts/Charts/MarkDimension/init(from:)`` for more details.
+    /// See ``LiveViewNativeCharts/Charts/MarkDimension/init(from:)-2ggwd`` for more details.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
