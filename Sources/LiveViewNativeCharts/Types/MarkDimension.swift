@@ -37,6 +37,19 @@ extension MarkDimension: AttributeDecodable, Decodable {
         }
     }
     
+    /// A size to use for a mark.
+    ///
+    /// `:automatic` is the simplest way to create a mark dimension.
+    ///
+    /// In other cases, use a tuple where the first element is the type, and the second is the value.
+    ///
+    /// `fixed`, `inset`, and `ratio` types can be used.
+    ///
+    /// ```elixir
+    /// {:fixed, 50}
+    /// {:inset, 15}
+    /// {:ratio, 0.5}
+    /// ```
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let value = try container.decode(Double.self, forKey: .value)

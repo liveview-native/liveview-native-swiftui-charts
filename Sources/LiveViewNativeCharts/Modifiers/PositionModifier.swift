@@ -30,18 +30,24 @@ struct PositionModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
     /// The plottable value used for positioning marks.
+    ///
+    /// See ``AnyPlottableValue`` for more details.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
     let value: AnyPlottableValue
     
     /// The axis marks are positioned along.
+    ///
+    /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/Axis`` for a list of possible values.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
     let axis: Axis?
     
     /// The total space available for marks.
+    ///
+    /// See ``LiveViewNativeCharts/Charts/MarkDimension/init(from:)`` for more details.
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
