@@ -15,7 +15,7 @@ import LiveViewNative
 ///
 /// ```html
 /// <Chart
-///   modifiers={chart_overlay(alignment: :, content: :my_overlay)}
+///   modifiers={chart_overlay(alignment: :leading, content: :my_overlay)}
 /// >
 ///   ...
 ///   <Text template={:my_overlay}>Hello, world!</Text>
