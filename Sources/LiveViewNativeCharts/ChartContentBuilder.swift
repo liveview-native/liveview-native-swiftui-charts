@@ -28,6 +28,7 @@ struct ChartContentBuilder: ContentBuilder {
         case foregroundStyle = "foreground_style"
         case offset
         case symbol
+        case symbolSize = "symbol_size"
     }
     
     static func lookup<R: RootRegistry>(
@@ -73,6 +74,8 @@ struct ChartContentBuilder: ContentBuilder {
             return try OffsetModifier(from: decoder)
         case .symbol:
             return try SymbolModifier(from: decoder)
+        case .symbolSize:
+            return try SymbolSizeModifier(from: decoder)
         }
     }
 }
