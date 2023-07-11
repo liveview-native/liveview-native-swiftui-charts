@@ -69,47 +69,23 @@ struct ChartXAxisLabelModifier<R: RootRegistry>: ViewModifier, Decodable {
     private var content: String?
     
     @ObservedElement(observeChildren: true) private var element
-    @ContentBuilderContext<R> private var context
+    @LiveContext<R> private var context
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.title = try container.decode(String.self, forKey: .title)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
         self.position = try container.decodeIfPresent(AnnotationPosition.self, forKey: .position) ?? .automatic
         self.alignment = try container.decodeIfPresent(Alignment.self, forKey: .alignment)
         self.spacing = try container.decodeIfPresent(CGFloat.self, forKey: .spacing)
-        self.content = try container.decode(String.self, forKey: .content)
+        self.content = try container.decodeIfPresent(String.self, forKey: .content)
     }
     
     func body(content: Content) -> some View {
         if let title {
-            switch (alignment, spacing) {
-            case (nil, nil):
-                content.chartXAxisLabel(title, position: position)
-            case let (alignment?, nil):
-                content.chartXAxisLabel(title, position: position, alignment: alignment)
-            case let (nil, spacing?):
-                content.chartXAxisLabel(title, position: position, spacing: spacing)
-            case let (alignment?, spacing?):
-                content.chartXAxisLabel(title, position: position, alignment: alignment, spacing: spacing)
-            }
+            content.chartXAxisLabel(title, position: position, alignment: alignment, spacing: spacing)
         } else if let template = self.content {
-            switch (alignment, spacing) {
-            case (nil, nil):
-                content.chartXAxisLabel(position: position) {
-                    context.buildChildren(of: element, forTemplate: template)
-                }
-            case let (alignment?, nil):
-                content.chartXAxisLabel(position: position, alignment: alignment) {
-                    context.buildChildren(of: element, forTemplate: template)
-                }
-            case let (nil, spacing?):
-                content.chartXAxisLabel(position: position, spacing: spacing) {
-                    context.buildChildren(of: element, forTemplate: template)
-                }
-            case let (alignment?, spacing?):
-                content.chartXAxisLabel(position: position, alignment: alignment, spacing: spacing) {
-                    context.buildChildren(of: element, forTemplate: template)
-                }
+            content.chartXAxisLabel(position: position, alignment: alignment, spacing: spacing) {
+                context.buildChildren(of: element, forTemplate: template)
             }
         } else {
             content
