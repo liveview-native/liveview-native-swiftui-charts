@@ -26,9 +26,14 @@ struct ChartContentBuilder: ContentBuilder {
     
     enum ModifierType: String, Decodable {
         case annotation
+        case alignsMarkStylesWithPlotArea = "aligns_mark_styles_with_plot_area"
+        case cornerRadius = "corner_radius"
         case foregroundStyle = "foreground_style"
+        case interpolationMethod = "interpolation_method"
         case offset
         case symbol
+        case symbolSize = "symbol_size"
+        case zIndex = "z_index"
     }
     
     static func lookup<R: RootRegistry>(
@@ -70,12 +75,26 @@ struct ChartContentBuilder: ContentBuilder {
         switch type {
         case .annotation:
             return try AnnotationModifier(from: decoder)
+        case .alignsMarkStylesWithPlotArea:
+            return try AlignsMarkStylesWithPlotAreaModifier(from: decoder)
+        case .cornerRadius:
+            return try CornerRadiusModifier(from: decoder)
         case .foregroundStyle:
             return try ForegroundStyleModifier(from: decoder)
+        case .interpolationMethod:
+            return try InterpolationMethodModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
         case .symbol:
             return try SymbolModifier(from: decoder)
+        case .symbolSize:
+            return try SymbolSizeModifier(from: decoder)
+        case .zIndex:
+            if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
+                return try ZIndexModifier(from: decoder)
+            } else {
+                return EmptyContentModifier()
+            }
         }
     }
 }

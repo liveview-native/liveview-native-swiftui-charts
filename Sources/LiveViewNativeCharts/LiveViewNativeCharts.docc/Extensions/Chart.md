@@ -13,3 +13,5 @@
 - ``AnnotationModifier``
 ### Legend Modifiers
 - ``ChartLegendModifier``
+### Background Modifiers
+- ``ChartBackgroundModifier``
