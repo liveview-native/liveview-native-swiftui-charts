@@ -25,9 +25,12 @@ struct ChartContentBuilder: ContentBuilder {
     }
     
     enum ModifierType: String, Decodable {
+        case cornerRadius = "corner_radius"
         case foregroundStyle = "foreground_style"
+        case interpolationMethod = "interpolation_method"
         case offset
         case symbol
+        case symbolSize = "symbol_size"
         case zIndex = "z_index"
     }
     
@@ -68,12 +71,18 @@ struct ChartContentBuilder: ContentBuilder {
         registry _: R.Type
     ) throws -> any ContentModifier<Self> {
         switch type {
+        case .cornerRadius:
+            return try CornerRadiusModifier(from: decoder)
         case .foregroundStyle:
             return try ForegroundStyleModifier(from: decoder)
+        case .interpolationMethod:
+            return try InterpolationMethodModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
         case .symbol:
             return try SymbolModifier(from: decoder)
+        case .symbolSize:
+            return try SymbolSizeModifier(from: decoder)
         case .zIndex:
             if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
                 return try ZIndexModifier(from: decoder)
