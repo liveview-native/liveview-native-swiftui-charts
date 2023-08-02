@@ -14,3 +14,5 @@
 - ``ChartYScaleModifier``
 ### Symbol Scale Modifiers
 - ``ChartSymbolScaleModifier``
+### Background Modifiers
+- ``ChartBackgroundModifier``
