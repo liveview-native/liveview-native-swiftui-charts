@@ -11,3 +11,5 @@
 - ``ChartYAxisModifier``
 ### Annotating Marks
 - ``AnnotationModifier``
+### Legend Modifiers
+- ``ChartLegendModifier``
