@@ -31,6 +31,7 @@ struct ChartContentBuilder: ContentBuilder {
         case offset
         case symbol
         case symbolSize = "symbol_size"
+        case zIndex = "z_index"
     }
     
     static func lookup<R: RootRegistry>(
@@ -82,6 +83,12 @@ struct ChartContentBuilder: ContentBuilder {
             return try SymbolModifier(from: decoder)
         case .symbolSize:
             return try SymbolSizeModifier(from: decoder)
+        case .zIndex:
+            if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
+                return try ZIndexModifier(from: decoder)
+            } else {
+                return EmptyContentModifier()
+            }
         }
     }
 }
