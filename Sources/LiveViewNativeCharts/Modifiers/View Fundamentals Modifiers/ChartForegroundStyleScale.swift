@@ -67,9 +67,8 @@ struct ChartForegroundStyleScaleModifier: ViewModifier, Decodable {
     ///
     /// ```elixir
     /// %{
-    ///     "A" => :circle,
-    ///     "B" => :asterisk,
-    ///     "C" => :square
+    ///     "A" => {:color, :blue},
+    ///     "B" => {:opacity, 0.5}
     /// }
     /// ```
     #if swift(>=5.8)
@@ -77,11 +76,6 @@ struct ChartForegroundStyleScaleModifier: ViewModifier, Decodable {
     #endif
     private let mapping: [String:AnyShapeStyle]?
 
-    struct Mapping: Decodable {
-        let value: String
-        let symbol: AnyShapeStyle
-    }
-    
     /// The possible data values plotted as foreground style in the chart.
     ///
     /// See ``LiveViewNativeCharts/Charts/AnyScaleDomain`` for more details.
@@ -96,7 +90,7 @@ struct ChartForegroundStyleScaleModifier: ViewModifier, Decodable {
     #if swift(>=5.8)
     @_documentation(visibility: public)
     #endif
-    private let range: [BasicChartSymbolShape]?
+    private let range: [AnyShapeStyle]?
     
     /// The scale type.
     ///
