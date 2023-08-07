@@ -12,6 +12,9 @@
 ### Axis Scale Modifiers
 - ``ChartXScaleModifier``
 - ``ChartYScaleModifier``
+### Axis Label Modifiers
+- ``ChartXAxisLabelModifier``
+- ``ChartYAxisLabelModifier``
 ### Symbol Scale Modifiers
 - ``ChartSymbolScaleModifier``
 ### Background Modifiers

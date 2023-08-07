@@ -29,7 +29,9 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
         case chartBackground = "chart_background"
         case chartOverlay = "chart_overlay"
         case chartXAxis = "chart_x_axis"
+        case chartXAxisLabel = "chart_x_axis_label"
         case chartYAxis = "chart_y_axis"
+        case chartYAxisLabel = "chart_y_axis_label"
         case chartXScale = "chart_x_scale"
         case chartYScale = "chart_y_scale"
     }
@@ -44,8 +46,12 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
             try ChartOverlayModifier<Root>(from: decoder)
         case .chartXAxis:
             try ChartXAxisModifier<Root>(from: decoder)
+        case .chartXAxisLabel:
+            try ChartXAxisLabelModifier<Root>(from: decoder)
         case .chartYAxis:
             try ChartYAxisModifier<Root>(from: decoder)
+        case .chartYAxisLabel:
+            try ChartYAxisLabelModifier<Root>(from: decoder)
         case .chartXScale:
             try ChartXScaleModifier(from: decoder)
         case .chartYScale:
