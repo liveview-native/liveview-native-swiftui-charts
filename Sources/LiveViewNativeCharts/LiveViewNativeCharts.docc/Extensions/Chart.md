@@ -6,6 +6,8 @@
 }
 
 ## Topics
+### Foreground Style Scale Modifiers
+- ``ChartForegroundStyleScaleModifier``
 ### Axis Modifiers
 - ``ChartXAxisModifier``
 - ``ChartYAxisModifier``
