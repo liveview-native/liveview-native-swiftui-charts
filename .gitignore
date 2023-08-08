@@ -6,6 +6,8 @@
 xcuserdata/
 .swiftpm
 
+Package.resolved
+
 # Elixir
 
 # The directory Mix will write compiled artifacts to.
