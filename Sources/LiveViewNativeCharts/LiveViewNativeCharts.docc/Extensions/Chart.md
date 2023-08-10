@@ -9,5 +9,10 @@
 ### Axis Modifiers
 - ``ChartXAxisModifier``
 - ``ChartYAxisModifier``
+### Axis Scale Modifiers
+- ``ChartXScaleModifier``
+- ``ChartYScaleModifier``
+### Symbol Scale Modifiers
+- ``ChartSymbolScaleModifier``
 ### Background Modifiers
 - ``ChartBackgroundModifier``
