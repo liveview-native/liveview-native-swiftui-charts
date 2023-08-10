@@ -30,6 +30,7 @@ struct ChartContentBuilder: ContentBuilder {
         case foregroundStyle = "foreground_style"
         case interpolationMethod = "interpolation_method"
         case offset
+        case position
         case symbol
         case symbolSize = "symbol_size"
         case zIndex = "z_index"
@@ -82,6 +83,8 @@ struct ChartContentBuilder: ContentBuilder {
             return try InterpolationMethodModifier(from: decoder)
         case .offset:
             return try OffsetModifier(from: decoder)
+        case .position:
+            return try PositionModifier(from: decoder)
         case .symbol:
             return try SymbolModifier(from: decoder)
         case .symbolSize:
