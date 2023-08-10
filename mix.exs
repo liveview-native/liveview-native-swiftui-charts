@@ -21,7 +21,7 @@ defmodule LiveViewNativeSwiftUiCharts.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:live_view_native_swift_ui, "~> 0.0.7"},
+      {:live_view_native_swift_ui, "~> 0.0.9"},
     ]
   end
 end
