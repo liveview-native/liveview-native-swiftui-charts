@@ -9,4 +9,8 @@ defmodule LiveViewNativeSwiftUiCharts.Modifiers.Symbol do
     field :value, PlottableValue
     field :symbol, KeyName
   end
+
+  def params(shape) when is_atom(shape) and not is_boolean(shape) and not is_nil(shape), do: [shape: shape]
+  def params([by: value]), do: [value: value]
+  def params(params) when is_list(params) or is_map(params), do: params
 end

@@ -371,7 +371,9 @@ extension Calendar.Component: AttributeDecodable {
         case "nanosecond": self = .nanosecond
         case "calendar": self = .calendar
         case "time_zone": self = .timeZone
+        #if swift(>=5.9)
         case "is_leap_month": self = .isLeapMonth
+        #endif
         default: throw AttributeDecodingError.badValue(Self.self)
         }
     }

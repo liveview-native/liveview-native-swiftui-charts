@@ -25,6 +25,7 @@ struct ChartContentBuilder: ContentBuilder {
     }
     
     enum ModifierType: String, Decodable {
+        case annotation
         case alignsMarkStylesWithPlotArea = "aligns_mark_styles_with_plot_area"
         case cornerRadius = "corner_radius"
         case foregroundStyle = "foreground_style"
@@ -72,6 +73,8 @@ struct ChartContentBuilder: ContentBuilder {
         registry _: R.Type
     ) throws -> any ContentModifier<Self> {
         switch type {
+        case .annotation:
+            return try AnnotationModifier(from: decoder)
         case .alignsMarkStylesWithPlotArea:
             return try AlignsMarkStylesWithPlotAreaModifier(from: decoder)
         case .cornerRadius:

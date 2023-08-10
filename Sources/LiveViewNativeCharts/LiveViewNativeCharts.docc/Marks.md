@@ -41,3 +41,4 @@ Each mark supports different values. These attributes are detailed in their docu
 ### Modifiers
 - ``ForegroundStyleModifier``
 - ``OffsetModifier``
+- ``SymbolModifier``
