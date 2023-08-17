@@ -371,7 +371,8 @@ extension Calendar.Component: AttributeDecodable {
         case "nanosecond": self = .nanosecond
         case "calendar": self = .calendar
         case "time_zone": self = .timeZone
-        case "is_leap_month": self = .isLeapMonth
+	// Remove for now since throws error under Xcode 15/Swift 5.8
+        //case "is_leap_month": self = .isLeapMonth
         default: throw AttributeDecodingError.badValue(Self.self)
         }
     }
