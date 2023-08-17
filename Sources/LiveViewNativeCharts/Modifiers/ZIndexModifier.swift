@@ -37,6 +37,10 @@ struct ZIndexModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.zIndex(value)
-    }
+        #if swift(>=5.9)
+            content.zIndex(value)
+        #else
+            content
+        #endif
+}
 }
