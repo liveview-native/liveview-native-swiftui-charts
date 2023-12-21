@@ -25,7 +25,7 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
         }
     }
     
-    public struct ModifierType: ViewModifier, ParseableModifierValue {
+    public struct CustomModifier: ViewModifier, ParseableModifierValue {
         enum Storage {
             case chartBackground(ChartBackgroundModifier<Root>)
             case chartOverlay(ChartOverlayModifier<Root>)
@@ -36,7 +36,7 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
         let storage: Storage
         
         public static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-            OneOf {
+            CustomModifierGroupParser(output: Self.self) {
                 ChartBackgroundModifier<Root>.parser(in: context).map({ Self(storage: .chartBackground($0)) })
                 ChartOverlayModifier<Root>.parser(in: context).map({ Self(storage: .chartOverlay($0)) })
                 ChartXAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartXAxis($0)) })

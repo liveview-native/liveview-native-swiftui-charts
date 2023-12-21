@@ -14,7 +14,7 @@ import Charts
 
 struct ChartSnapshotHost: View {
     let document: Document
-    @ContentBuilderContext<EmptyRegistry> private var context
+    @ContentBuilderContext<EmptyRegistry, LiveViewNativeCharts.ChartContentBuilder> private var context
     
     var body: some View {
         Charts.Chart {
@@ -44,11 +44,11 @@ extension XCTestCase {
         chartAttachment.lifetime = lifetime
         self.add(chartAttachment)
         
-        let session = LiveSessionCoordinator(URL(string: "http://localhost")!)
+        let session = LiveSessionCoordinator<EmptyRegistry>(URL(string: "http://localhost")!)
         let document = try LiveViewNativeCore.Document.parse(markup)
         let markupRenderer = ImageRenderer(content: ChartSnapshotHost(document: document)
-            .environment(\.coordinatorEnvironment, CoordinatorEnvironment(session.rootCoordinator, document: document))
-            .environment(\.anyLiveContextStorage, LiveContextStorage(coordinator: session.rootCoordinator, url: session.url))
+            .environment(\.coordinatorEnvironment, CoordinatorEnvironment(session.navigationPath.first!.coordinator, document: document))
+            .environment(\.anyLiveContextStorage, LiveContextStorage(coordinator: session.navigationPath.first!.coordinator, url: session.url))
         )
         
         guard let markupImage = markupRenderer.uiImage
