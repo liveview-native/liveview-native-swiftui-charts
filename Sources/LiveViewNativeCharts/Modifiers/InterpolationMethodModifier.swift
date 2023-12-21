@@ -7,31 +7,19 @@
 
 import Charts
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-/// Set the interpolation method for ``LineMark`` and ``AreaMark``.
-///
-/// Customize the shape of area and line marks with different interpolation methods.
-///
-/// ```html
-/// <LineMark modifiers={interpolation_method(:catmull_rom)} />
-/// <AreaMark modifiers={interpolation_method(:cardinal)} />
-/// ```
-///
-/// ## Arguments
-/// * ``method``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
+@ParseableExpression
 struct InterpolationMethodModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
-    /// The interpolation method to use.
-    /// 
-    /// See ``LiveViewNativeCharts/Charts/InterpolationMethod`` for a list of possible values.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
+    static let name = "interpolationMethod"
+    
     let method: InterpolationMethod
+    
+    init(_ method: InterpolationMethod) {
+        self.method = method
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,

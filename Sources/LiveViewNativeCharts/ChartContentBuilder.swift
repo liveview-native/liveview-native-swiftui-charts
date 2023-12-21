@@ -6,6 +6,7 @@
 //
 
 import LiveViewNative
+import LiveViewNativeStylesheet
 import LiveViewNativeCore
 import Charts
 import SwiftUI
@@ -24,15 +25,55 @@ struct ChartContentBuilder: ContentBuilder {
         case ruleMark = "RuleMark"
     }
     
-    enum ModifierType: String, Decodable {
-        case alignsMarkStylesWithPlotArea = "aligns_mark_styles_with_plot_area"
-        case cornerRadius = "corner_radius"
-        case foregroundStyle = "foreground_style"
-        case interpolationMethod = "interpolation_method"
-        case offset
-        case symbol
-        case symbolSize = "symbol_size"
-        case zIndex = "z_index"
+    enum ModifierType: ContentModifier {
+        typealias Builder = ChartContentBuilder
+        
+        case alignsMarkStylesWithPlotArea(AlignsMarkStylesWithPlotAreaModifier)
+        case cornerRadius(CornerRadiusModifier)
+        case foregroundStyle(ForegroundStyleModifier)
+        case interpolationMethod(InterpolationMethodModifier)
+        case offset(OffsetModifier)
+        case symbol(SymbolModifier)
+        case symbolSize(SymbolSizeModifier)
+        case zIndex(ZIndexModifier)
+        
+        static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
+            OneOf {
+                AlignsMarkStylesWithPlotAreaModifier.parser(in: context).map(Self.alignsMarkStylesWithPlotArea)
+                CornerRadiusModifier.parser(in: context).map(Self.cornerRadius)
+                ForegroundStyleModifier.parser(in: context).map(Self.foregroundStyle)
+                InterpolationMethodModifier.parser(in: context).map(Self.interpolationMethod)
+                OffsetModifier.parser(in: context).map(Self.offset)
+                SymbolModifier.parser(in: context).map(Self.symbol)
+                SymbolSizeModifier.parser(in: context).map(Self.symbolSize)
+                ZIndexModifier.parser(in: context).map(Self.zIndex)
+            }
+        }
+        
+        func apply<R>(
+            to content: Builder.Content,
+            on element: ElementNode,
+            in context: Builder.Context<R>
+        ) -> Builder.Content where R : RootRegistry {
+            switch self {
+            case let .alignsMarkStylesWithPlotArea(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .cornerRadius(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .foregroundStyle(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .interpolationMethod(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .offset(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .symbol(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .symbolSize(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            case let .zIndex(modifier):
+                return modifier.apply(to: content, on: element, in: context)
+            }
+        }
     }
     
     static func lookup<R: RootRegistry>(
@@ -64,34 +105,5 @@ struct ChartContentBuilder: ContentBuilder {
     
     static func reduce(accumulated: Content, next: Content) -> Content {
         Charts.ChartContentBuilder.buildPartialBlock(accumulated: accumulated, next: next)
-    }
-    
-    static func decodeModifier<R: RootRegistry>(
-        _ type: ModifierType,
-        from decoder: Decoder,
-        registry _: R.Type
-    ) throws -> any ContentModifier<Self> {
-        switch type {
-        case .alignsMarkStylesWithPlotArea:
-            return try AlignsMarkStylesWithPlotAreaModifier(from: decoder)
-        case .cornerRadius:
-            return try CornerRadiusModifier(from: decoder)
-        case .foregroundStyle:
-            return try ForegroundStyleModifier(from: decoder)
-        case .interpolationMethod:
-            return try InterpolationMethodModifier(from: decoder)
-        case .offset:
-            return try OffsetModifier(from: decoder)
-        case .symbol:
-            return try SymbolModifier(from: decoder)
-        case .symbolSize:
-            return try SymbolSizeModifier(from: decoder)
-        case .zIndex:
-            if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
-                return try ZIndexModifier(from: decoder)
-            } else {
-                return EmptyContentModifier()
-            }
-        }
     }
 }

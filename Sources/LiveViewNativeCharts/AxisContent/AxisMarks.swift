@@ -144,13 +144,14 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
                 }
             Charts.AxisMarks(preset: preset, position: position, values: values) { (value: Charts.AxisValue) in
                 AnyAxisMark(
-                    try! AxisMarkBuilder.build(
+                    try! AxisContentBuilder.build(
                         children.filter({
                             (try? $0.attributes
                                 .first(where: { $0.name == "value" })
                                 .map(Double.init))
                             == value.as(Double.self)
                         }),
+                        with: AxisMarkBuilder.self,
                         in: context
                     )
                 )
@@ -158,8 +159,9 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
         } else if !element.children().isEmpty {
             Charts.AxisMarks(preset: preset, position: position, values: values) {
                 AnyAxisMark(
-                    try! AxisMarkBuilder.buildChildren(
+                    try! AxisContentBuilder.buildChildren(
                         of: element,
+                        with: AxisMarkBuilder.self,
                         in: context
                     )
                 )
@@ -371,7 +373,12 @@ extension Calendar.Component: AttributeDecodable {
         case "nanosecond": self = .nanosecond
         case "calendar": self = .calendar
         case "time_zone": self = .timeZone
-        case "is_leap_month": self = .isLeapMonth
+        case "is_leap_month":
+            if #available(macOS 14, iOS 17, tvOS 17, watchOS 10, *) {
+                self = .isLeapMonth
+            } else {
+                throw AttributeDecodingError.badValue(Self.self)
+            }
         default: throw AttributeDecodingError.badValue(Self.self)
         }
     }
@@ -424,10 +431,6 @@ extension Calendar.Identifier: AttributeDecodable {
 
 extension StrokeStyle: AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
-        guard let value = attribute?.value
-        else { throw AttributeDecodingError.missingAttribute(Self.self) }
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        self = try decoder.decode(Self.self, from: Data(value.utf8))
+        self = .init(lineWidth: try Double(from: attribute))
     }
 }

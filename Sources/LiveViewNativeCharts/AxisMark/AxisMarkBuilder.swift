@@ -5,10 +5,11 @@
 //  Created by Carson Katri on 6/14/23.
 //
 
+import SwiftUI
 import Charts
 import LiveViewNative
 import LiveViewNativeCore
-import SwiftUI
+import LiveViewNativeStylesheet
 
 /// A builder for `AxisContent`.
 struct AxisMarkBuilder: ContentBuilder {
@@ -21,10 +22,35 @@ struct AxisMarkBuilder: ContentBuilder {
         case axisValueLabel = "AxisValueLabel"
     }
     
-    enum ModifierType: String, Decodable {
-        case font
-        case foregroundStyle = "foreground_style"
-        case offset
+    enum ModifierType: ContentModifier {
+        typealias Builder = AxisMarkBuilder
+        
+        case font(FontModifier)
+        case foregroundStyle(AxisMarkForegroundStyleModifier)
+        case offset(AxisMarkOffsetModifier)
+        
+        static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
+            OneOf {
+                FontModifier.parser(in: context).map(Self.font)
+                AxisMarkForegroundStyleModifier.parser(in: context).map(Self.foregroundStyle)
+                AxisMarkOffsetModifier.parser(in: context).map(Self.offset)
+            }
+        }
+        
+        func apply<R>(
+            to content: Builder.Content,
+            on element: ElementNode,
+            in context: Builder.Context<R>
+        ) -> Builder.Content where R : RootRegistry {
+            switch self {
+            case let .font(modifier):
+                modifier.apply(to: content, on: element, in: context)
+            case let .foregroundStyle(modifier):
+                modifier.apply(to: content, on: element, in: context)
+            case let .offset(modifier):
+                modifier.apply(to: content, on: element, in: context)
+            }
+        }
     }
     
     static func lookup<R: RootRegistry>(
@@ -50,21 +76,6 @@ struct AxisMarkBuilder: ContentBuilder {
     
     static func reduce(accumulated: Content, next: Content) -> Content {
         Charts.AxisMarkBuilder.buildPartialBlock(accumulated: accumulated, next: next)
-    }
-    
-    static func decodeModifier<R: RootRegistry>(
-        _ type: ModifierType,
-        from decoder: Decoder,
-        registry _: R.Type
-    ) throws -> any ContentModifier<Self> {
-        switch type {
-        case .font:
-            return try FontModifier(from: decoder)
-        case .foregroundStyle:
-            return try AxisMarkForegroundStyleModifier(from: decoder)
-        case .offset:
-            return try AxisMarkOffsetModifier(from: decoder)
-        }
     }
 }
 

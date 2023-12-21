@@ -5,9 +5,10 @@
 //  Created by Carson Katri on 6/8/23.
 //
 
-import LiveViewNative
 import Charts
 import SwiftUI
+import LiveViewNative
+import LiveViewNativeStylesheet
 
 /// Swift Charts add-on library registry.
 ///
@@ -24,23 +25,35 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
         }
     }
     
-    public enum ModifierType: String {
-        case chartBackground = "chart_background"
-        case chartOverlay = "chart_overlay"
-        case chartXAxis = "chart_x_axis"
-        case chartYAxis = "chart_y_axis"
-    }
-    
-    public static func decodeModifier(_ type: ModifierType, from decoder: Decoder) throws -> some ViewModifier {
-        switch type {
-        case .chartBackground:
-            try ChartBackgroundModifier<Root>(from: decoder)
-        case .chartOverlay:
-            try ChartOverlayModifier<Root>(from: decoder)
-        case .chartXAxis:
-            try ChartXAxisModifier<Root>(from: decoder)
-        case .chartYAxis:
-            try ChartYAxisModifier<Root>(from: decoder)
+    public struct ModifierType: ViewModifier, ParseableModifierValue {
+        enum Storage {
+            case chartBackground(ChartBackgroundModifier<Root>)
+            case chartOverlay(ChartOverlayModifier<Root>)
+            case chartXAxis(ChartXAxisModifier<Root>)
+            case chartYAxis(ChartYAxisModifier<Root>)
+        }
+        let storage: Storage
+        
+        public static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
+            OneOf {
+                ChartBackgroundModifier<Root>.parser(in: context).map({ Self(storage: .chartBackground($0)) })
+                ChartOverlayModifier<Root>.parser(in: context).map({ Self(storage: .chartOverlay($0)) })
+                ChartXAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartXAxis($0)) })
+                ChartYAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartYAxis($0)) })
+            }
+        }
+        
+        public func body(content: Content) -> some View {
+            switch storage {
+            case .chartBackground(let modifier):
+                content.modifier(modifier)
+            case .chartOverlay(let modifier):
+                content.modifier(modifier)
+            case .chartXAxis(let modifier):
+                content.modifier(modifier)
+            case .chartYAxis(let modifier):
+                content.modifier(modifier)
+            }
         }
     }
 }
