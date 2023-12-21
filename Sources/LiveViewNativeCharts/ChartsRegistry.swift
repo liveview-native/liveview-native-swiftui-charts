@@ -31,6 +31,7 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
             case chartOverlay(ChartOverlayModifier<Root>)
             case chartXAxis(ChartXAxisModifier<Root>)
             case chartYAxis(ChartYAxisModifier<Root>)
+            case noop
         }
         let storage: Storage
         
@@ -40,6 +41,9 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
                 ChartOverlayModifier<Root>.parser(in: context).map({ Self(storage: .chartOverlay($0)) })
                 ChartXAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartXAxis($0)) })
                 ChartYAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartYAxis($0)) })
+                ChartContentBuilder.ModifierType.parser(in: context).map({ _ in Self(storage: .noop) })
+                AxisContentBuilder.ModifierType.parser(in: context).map({ _ in Self(storage: .noop) })
+                AxisMarkBuilder.ModifierType.parser(in: context).map({ _ in Self(storage: .noop) })
             }
         }
         
@@ -53,6 +57,8 @@ public struct ChartsRegistry<Root: RootRegistry>: CustomRegistry {
                 content.modifier(modifier)
             case .chartYAxis(let modifier):
                 content.modifier(modifier)
+            case .noop:
+                content
             }
         }
     }
