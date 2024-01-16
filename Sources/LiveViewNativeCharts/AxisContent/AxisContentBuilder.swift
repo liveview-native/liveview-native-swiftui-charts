@@ -18,14 +18,6 @@ struct AxisContentBuilder: ContentBuilder {
         case axisMarks = "AxisMarks"
     }
     
-    struct ModifierType: RawRepresentable, Decodable {
-        var rawValue: String
-        
-        init?(rawValue: String) {
-            self.rawValue = rawValue
-        }
-    }
-    
     static func lookup<R: RootRegistry>(
         _ tag: TagName,
         element: ElementNode,
@@ -43,14 +35,6 @@ struct AxisContentBuilder: ContentBuilder {
     
     static func reduce(accumulated: Content, next: Content) -> Content {
         Charts.AxisContentBuilder.buildPartialBlock(accumulated: accumulated, next: next)
-    }
-    
-    static func decodeModifier<R: RootRegistry>(
-        _ type: ModifierType,
-        from decoder: Decoder,
-        registry _: R.Type
-    ) throws -> any ContentModifier<Self> {
-        fatalError()
     }
 }
 

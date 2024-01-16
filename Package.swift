@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -13,14 +13,17 @@ let package = Package(
             targets: ["LiveViewNativeCharts"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/liveview-native/liveview-client-swiftui", branch: "main")
+       .package(url: "https://github.com/liveview-native/liveview-client-swiftui", from: "0.2.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "LiveViewNativeCharts",
-            dependencies: [.product(name: "LiveViewNative", package: "liveview-client-swiftui")]
+            dependencies: [
+                .product(name: "LiveViewNative", package: "liveview-client-swiftui"),
+                .product(name: "LiveViewNativeStylesheet", package: "liveview-client-swiftui"),
+            ]
         ),
         .testTarget(
             name: "LiveViewNativeChartsTests",

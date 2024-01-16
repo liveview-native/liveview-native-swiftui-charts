@@ -8,39 +8,21 @@
 import Charts
 import SwiftUI
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-// this modifier is created by `liveview-client-swiftui`, and an implementation for Charts is provided here.
-/// Set the corner radius of a mark.
-///
-/// Use this modifier on a mark to set the corner radius.
-/// Optionally provide a ``style`` to use.
-///
-/// ```html
-/// <BarMark modifiers={corner_radius(20, style: :circular)} ... />
-/// ```
-///
-/// ## Arguments
-/// * ``radius``
-/// * ``style``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
+@ParseableExpression
 struct CornerRadiusModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
-    /// The corner radius.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    private let radius: CGFloat
+    static let name = "cornerRadius"
     
-    /// The style of corner radius to apply. Defaults to `continuous`.
-    ///
-    /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/RoundedCornerStyle`` for a list of possible values.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
+    private let radius: CGFloat
     private let style: RoundedCornerStyle
+    
+    init(_ radius: CGFloat, style: RoundedCornerStyle = .continuous) {
+        self.radius = radius
+        self.style = style
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,

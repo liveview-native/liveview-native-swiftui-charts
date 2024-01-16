@@ -7,36 +7,30 @@
 
 import Charts
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-// this modifier is created by `liveview-client-swiftui`, and an implementation for Charts is provided here.
-/// Set the Z order of a mark.
-///
-/// Use this modifier on a mark to set its order when content overlaps.
-///
-/// ```html
-/// <BarMark modifiers={z_index(2)} />
-/// ```
-///
-/// ## Arguments
-/// * ``value``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
-@available(iOS 17, macOS 14, tvOS 17, watchOS 10, *)
+@ParseableExpression
 struct ZIndexModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
-    /// The Z order.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
+    static let name = "zIndex"
+    
     let value: Double
+    
+    @available(iOS 17, macOS 14, tvOS 17, watchOS 10, *)
+    init(_ value: Double) {
+        self.value = value
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.zIndex(value)
+        if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
+            return content.zIndex(value)
+        } else {
+            return content
+        }
     }
 }

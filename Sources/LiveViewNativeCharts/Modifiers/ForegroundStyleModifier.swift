@@ -8,93 +8,81 @@
 import Charts
 import SwiftUI
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-/// Displays data with foreground colors.
-///
-/// Use this modifier to use a unique color for different categories on the same mark.
-///
-/// ```html
-/// <BarMark
-///   x={item.profit}
-///   x:label="Profit"
-///
-///   modifiers={@native |> foreground_style(value: {"Product", item.product})}
-/// />
-/// ```
-///
-/// Alternatively, provide a `ShapeStyle` to set the color of a mark directly.
-///
-/// ```html
-/// <RuleMark
-///   y={item.min_height}
-///   y:label="Minimum Height"
-///
-///   modifiers={@native |> foreground_style(primary: {:color, :red})}
-/// />
-/// ```
-///
-/// This modifier can also be applied to axis marks.
-///
-/// ```html
-/// <AxisGridLine modifiers={@native |> foreground_style(primary: {:color, :red})} />
-/// ```
-///
-/// ## Arguments
-/// * ``value``
-/// * ``primary``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
+@ParseableExpression
 struct ForegroundStyleModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
-    /// A plottable value used to differentiate elements of the graph.
-    ///
-    /// See ``AnyPlottableValue`` for more details.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    let value: AnyPlottableValue?
+    static let name = "foregroundStyle"
     
-    /// The ``LiveViewNativeCharts/LiveViewNative/SwiftUI/AnyShapeStyle`` to apply.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    let primary: AnyShapeStyle?
+    enum Storage {
+        case primary(AnyShapeStyle)
+        case value(AnyPlottableValue)
+    }
+    
+    let storage: Storage
+    
+    init(_ primary: AnyShapeStyle) {
+        self.storage = .primary(primary)
+    }
+    
+    init(by value: AnyPlottableValue) {
+        self.storage = .value(value)
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        if let primary {
+        switch storage {
+        case let .primary(primary):
             return content.foregroundStyle(primary)
-        } else if let value {
-            return unbox(content: content, label: value.label, value.value)
-        } else {
-            return content
+        case let .value(value):
+            return unbox(
+                content: content,
+                label: value.label,
+                value.value.resolve(on: element),
+                on: element,
+                in: context
+            )
         }
     }
     
-    func unbox(content: Builder.Content, label: String, _ v: some Plottable) -> Builder.Content {
-        content.foregroundStyle(by: .value(label, v))
+    func unbox<R: RootRegistry>(
+        content: Builder.Content,
+        label: AnyPlottableValue.Label,
+        _ v: some Plottable,
+        on element: ElementNode,
+        in context: Builder.Context<R>
+    ) -> Builder.Content {
+        switch label {
+        case .constant(let label):
+            content.foregroundStyle(by: .value(label, v))
+        case .text(let label):
+            content.foregroundStyle(by: .value(Builder.buildChildText(of: element, forTemplate: label, in: context), v))
+        }
     }
 }
 
+@ParseableExpression
 struct AxisMarkForegroundStyleModifier: ContentModifier {
     typealias Builder = AxisMarkBuilder
     
-    let primary: AnyShapeStyle?
+    static let name = "foregroundStyle"
+    
+    let primary: AnyShapeStyle
+    
+    init(_ primary: AnyShapeStyle) {
+        self.primary = primary
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        if let primary {
-            return content.foregroundStyle(primary)
-        } else {
-            return content
-        }
+        return content.foregroundStyle(primary)
     }
 }

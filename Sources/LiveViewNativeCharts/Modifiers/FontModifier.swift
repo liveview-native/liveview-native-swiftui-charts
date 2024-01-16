@@ -8,31 +8,19 @@
 import Charts
 import SwiftUI
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-// this modifier is created by `liveview-client-swiftui`, and an implementation for Charts is provided here.
-/// Sets the font of an axis mark.
-///
-/// Use this modifier on an axis mark to set the font.
-///
-/// ```html
-/// <AxisGridLine modifiers={font(@native, font: {:system, :footnote})} />
-/// ```
-///
-/// ## Arguments
-/// * ``font``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
+@ParseableExpression
 struct FontModifier: ContentModifier {
     typealias Builder = AxisMarkBuilder
     
-    /// The font to apply.
-    ///
-    /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/Font`` for more details.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
+    static let name = "font"
+    
     private let font: Font
+    
+    init(_ font: Font) {
+        self.font = font
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,

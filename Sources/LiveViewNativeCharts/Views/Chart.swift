@@ -35,7 +35,7 @@ import Charts
 /// Use modifiers to customize the chart's style, axes, etc.
 public struct Chart<R: RootRegistry>: View {
     @ObservedElement(observeChildren: true) private var element
-    @ContentBuilderContext<R> private var context
+    @ContentBuilderContext<R, ChartContentBuilder> private var context
     
     public var body: some View {
         Charts.Chart {

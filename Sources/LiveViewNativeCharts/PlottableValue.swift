@@ -5,10 +5,12 @@
 //  Created by Carson Katri on 6/8/23.
 //
 
+import SwiftUI
 import Charts
 import Foundation
 import LiveViewNative
 import LiveViewNativeCore
+import LiveViewNativeStylesheet
 
 extension ElementNode {
     /// Decodes a `Plottable` value and label from an attribute.
@@ -48,26 +50,50 @@ extension ElementNode {
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
-struct AnyPlottableValue: Decodable {
-    let label: String
-    let value: any Plottable
+struct AnyPlottableValue: ParseableModifierValue {
+    let label: Label
+    let value: AnyPlottable
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        self.label = try container.decode(String.self, forKey: .label)
-        
-        if let value = try? container.decode(Date.self, forKey: .value) {
-            self.value = value
-        } else if let value = try? container.decode(Double.self, forKey: .value) {
-            self.value = value
-        } else {
-            self.value = try container.decode(String.self, forKey: .value)
+    enum Label {
+        case constant(String)
+        case text(TextReference)
+    }
+    
+    static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
+        ImplicitStaticMember {
+            ParseablePlottableValue.parser(in: context).map(\.value)
         }
     }
     
-    enum CodingKeys: CodingKey {
-        case label
-        case value
+    @ParseableExpression
+    struct ParseablePlottableValue {
+        static var name: String { "value" }
+        
+        let value: AnyPlottableValue
+        
+        init(_ label: TextReference, _ value: AnyPlottable) {
+            self.value = .init(label: .text(label), value: value)
+        }
+        
+        init(_ label: String, _ value: AnyPlottable) {
+            self.value = .init(label: .constant(label), value: value)
+        }
+    }
+}
+
+struct AnyPlottable: ParseableModifierValue {
+    private let _resolve: (ElementNode) -> any Plottable
+    
+    static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
+        OneOf {
+            AttributeReference<Int>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
+            AttributeReference<Double>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
+            AttributeReference<Date>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
+            AttributeReference<String>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
+        }
+    }
+    
+    func resolve(on element: ElementNode) -> any Plottable {
+        _resolve(element)
     }
 }

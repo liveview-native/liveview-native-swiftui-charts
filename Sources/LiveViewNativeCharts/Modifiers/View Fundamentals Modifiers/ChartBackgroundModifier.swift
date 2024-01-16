@@ -8,55 +8,26 @@
 import Charts
 import SwiftUI
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-/// Adds a background to a view that contains a chart.
-///
-/// ```html
-/// <Chart modifiers={chart_background(alignment: :center, content: :background)}>
-///   <Color name="system-green" template={:background} />
-///   <BarMark>...</BarMark>
-/// </Chart>
-/// ```
-///
-/// ## Arguments
-/// * ``alignment``
-/// * ``content``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
-struct ChartBackgroundModifier<R: RootRegistry>: ViewModifier, Decodable {
-    /// The alignment of the content.
-    ///
-    /// See ``LiveViewNativeCharts/LiveViewNative/SwiftUI/Alignment`` for more details.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    let alignment: Alignment
+@ParseableExpression
+struct ChartBackgroundModifier<R: RootRegistry>: ViewModifier {
+    static var name: String { "chartBackground" }
     
-    /// The content of the background.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    let content: String
+    let alignment: Alignment
+    let content: ViewReference
     
     @ObservedElement private var element
     @LiveContext<R> private var context
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        self.alignment = try container.decode(Alignment.self, forKey: .alignment)
-        self.content = try container.decode(String.self, forKey: .content)
+    
+    init(alignment: Alignment, content: ViewReference) {
+        self.alignment = alignment
+        self.content = content
     }
 
     func body(content: Content) -> some View {
-        content.chartBackground(alignment: self.alignment) {_ in
-            context.buildChildren(of: element, forTemplate: self.content)
+        content.chartBackground(alignment: self.alignment) { _ in
+            self.content.resolve(on: element, in: context)
         }
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case alignment
-        case content
     }
 }

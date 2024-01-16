@@ -7,63 +7,50 @@
 
 import Charts
 import LiveViewNative
+import LiveViewNativeStylesheet
 
-// this modifier is created by `liveview-client-swiftui`, and an implementation for Charts is provided here.
-/// Offset a mark or axis.
-///
-/// Use this modifier on a mark to offset it.
-///
-/// ```html
-/// <BarMark modifiers={offset(@native, x: 50)} />
-/// ```
-///
-/// Use this modifier on an axis mark to offset it.
-///
-/// ```html
-/// <AxisGridLine modifiers={offset(@native, y: 50)} />
-/// ```
-///
-/// ## Arguments
-/// * ``x``
-/// * ``y``
-#if swift(>=5.8)
-@_documentation(visibility: public)
-#endif
+@ParseableExpression
 struct OffsetModifier: ContentModifier {
     typealias Builder = ChartContentBuilder
     
-    /// The horizontal offset
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    let x: Double?
+    static let name = "offset"
     
-    /// The vertical offset.
-    #if swift(>=5.8)
-    @_documentation(visibility: public)
-    #endif
-    let y: Double?
+    let x: Double
+    let y: Double
+    
+    init(x: Double, y: Double) {
+        self.x = x
+        self.y = y
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.offset(x: x ?? 0, y: y ?? 0)
+        content.offset(x: x, y: y)
     }
 }
 
+@ParseableExpression
 struct AxisMarkOffsetModifier: ContentModifier {
     typealias Builder = AxisMarkBuilder
     
-    let x: Double?
-    let y: Double?
+    static let name = "offset"
+    
+    let x: Double
+    let y: Double
+    
+    init(x: Double = 0, y: Double = 0) {
+        self.x = x
+        self.y = y
+    }
     
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.offset(x: x ?? 0, y: y ?? 0)
+        content.offset(x: x, y: y)
     }
 }
