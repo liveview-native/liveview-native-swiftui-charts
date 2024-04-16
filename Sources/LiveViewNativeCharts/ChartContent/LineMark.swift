@@ -12,11 +12,11 @@ import LiveViewNative
 ///
 /// ```html
 /// <LineMark
-///   x={item.date}
 ///   x:label="Date"
+///   x:value={item.date}
 ///
-///   y={item.profit}
 ///   y:label="Profit"
+///   y:value={item.profit}
 /// />
 /// ```
 ///
@@ -24,14 +24,14 @@ import LiveViewNative
 ///
 /// ```html
 /// <LineMark
-///   x={item.date}
 ///   x:label="Date"
+///   x:value={item.date}
 ///
-///   y={item.profit}
 ///   y:label="Profit"
+///   y:value={item.profit}
 ///
-///   series={item.product}
 ///   series:label="Product"
+///   series:value={item.product}
 /// />
 /// ```
 ///

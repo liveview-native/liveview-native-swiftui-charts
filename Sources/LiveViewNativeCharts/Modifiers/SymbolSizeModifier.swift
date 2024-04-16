@@ -43,7 +43,7 @@ struct SymbolSizeModifier: ContentModifier {
     ) -> Builder.Content {
         switch storage {
         case let .value(value):
-            return unbox(content: content, label: value.label, value.value.resolve(on: element), on: element, in: context)
+            return unbox(content: content, label: value.label, value.value.resolve(on: element).value, on: element, in: context)
         case let .area(area):
             return content.symbolSize(area)
         case let .size(size):

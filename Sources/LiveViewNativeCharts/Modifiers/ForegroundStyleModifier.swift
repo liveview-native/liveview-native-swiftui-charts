@@ -43,7 +43,7 @@ struct ForegroundStyleModifier: ContentModifier {
             return unbox(
                 content: content,
                 label: value.label,
-                value.value.resolve(on: element),
+                value.value.resolve(on: element).value,
                 on: element,
                 in: context
             )

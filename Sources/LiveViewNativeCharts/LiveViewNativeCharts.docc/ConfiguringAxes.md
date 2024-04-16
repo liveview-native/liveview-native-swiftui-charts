@@ -8,12 +8,20 @@ An axis mark can be used within the ``AxisMarks`` element.
 This element is used as the content of the ``ChartXAxisModifier`` and ``ChartYAxisModifier`` modifiers.
 
 ```html
-<Chart modifiers={chart_x_axis(@native, content: :my_axes)}>
+<Chart class="my-x-axis">
   ...
   <AxisMarks template={:my_axes}>
     <AxisGridLine />
   </AxisMarks>
 </Chart>
+```
+
+```elixir
+~SHEET"""
+"my-x-axis" do
+  chartXAxis(content: :my_axes)
+end
+"""
 ```
 
 Axis marks can be customized with modifiers.

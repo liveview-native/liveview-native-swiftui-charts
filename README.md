@@ -1,87 +1,77 @@
-# liveview-native-swiftui-charts
-
-## About
+# Charts for LiveView Native SwiftUI
 
 `liveview-native-swiftui-charts` is an add-on library for [LiveView Native](https://github.com/liveview-native/live_view_native). It adds [Swift Charts](https://developer.apple.com/documentation/charts) support for data visualization.
 
+## Installation
+
+1. In Xcode, select *File → Add Packages...*
+2. Enter the package URL `https://github.com/liveview-native/liveview-native-swiftui-charts`
+3. Select *Add Package*
+
 ## Usage
 
-Add this library as a package to your LiveView Native application's Xcode project using its repo URL. Then, create an `AggregateRegistry` to include the provided `ChartsRegistry` within your native app builds:
+Import `LiveViewNativeCharts` and add the `ChartsRegistry` to the list of addons on your `LiveView`:
 
-```diff
+```swift
 import SwiftUI
 import LiveViewNative
-+ import LiveViewNativeCharts
-+ 
-+ struct MyRegistry: CustomRegistry {
-+     typealias Root = AppRegistries
-+ }
-+ 
-+ struct AppRegistries: AggregateRegistry {
-+     #Registries<
-+         MyRegistry,
-+         ChartsRegistry<Self>
-+     >
-+ }
+import LiveViewNativeCharts
 
-@MainActor
 struct ContentView: View {
--     @StateObject private var session: LiveSessionCoordinator<EmptyRegistry> = {
-+     @StateObject private var session: LiveSessionCoordinator<AppRegistries> = {
-        var config = LiveSessionConfiguration()
-        config.navigationMode = .enabled
-        
-        return LiveSessionCoordinator(URL(string: "http://localhost:4000/")!, config: config)
-    }()
-
     var body: some View {
-        LiveView(session: session)
+        #LiveView(
+            .localhost,
+            addons: [ChartsRegistry<_>.self]
+        )
     }
 }
 ```
 
-To render a chart within a SwiftUI HEEx template, use the `Chart` element.
-Include mark elements within the chart to display some data:
+Now you can use the `Chart` element in your template.
 
-```elixir
-defmodule MyAppWeb.ChartLive do
-  use Phoenix.LiveView
-  use LiveViewNative.LiveView
+<table>
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, data: [
-      %{ department: "Production", profit: 4000, product_category: "Gizmos" },
-      %{ department: "Marketing", profit: 2000, product_category: "Gizmos" },
-      %{ department: "Finance", profit: 2000, product_category: "Gizmos" },
-      ...
-    ])}
-  end
+<tr>
+<td>
 
-  @impl true
-  def render(%{platform_id: :swiftui} = assigns) do
-    ~Z"""
-    <Chart>
-      <%= for item <- @data do %>
-        <BarMark
-          x={item.department}
-          x:label="Department"
+```heex
+<Chart>
+  <BarMark
+    :for={item <- @data}
 
-          y={item.profit}
-          y:label="Profit"
+    x:label="Department"
+    x:value={item.department}
 
-          modifiers={@native |> foreground_style(value: {"Product Category", item.product_category})}
-        />
-      <% end %>
-    </Chart>
-    """swiftui
-  end
+    y:label="Profit"
+    y:value={item.profit}
+
+    class="fg-product-category"
+    product-category={item.product_category}
+  />
+</Chart>
+```
+```ex
+~SHEET"""
+"fg-product-category" do
+  foregroundStyle(by: .value("Product Category", attr("product-category")))
 end
+"""
 ```
 
-![LiveView Native Charts screenshot](./docs/example.png)
+</td>
+
+<td>
+<img src="./docs/example.png" alt="LiveView Native Charts screenshot" width="300" />
+</td>
+
+</tr>
+
+</table>
 
 ## Learn more
 
-  * Official website: https://native.live
-  * Docs: https://hexdocs.pm/live_view_native_platform
-  * Source: https://github.com/liveviewnative/live_view_native_platform
+You can view documentation on the elements and attributes in this addon from Xcode:
+
+1. In Xcode, select *Product → Build Documentation* in the menu bar
+2. Select *Window → Developer Documentation* (Xcode should open this for you after the documentation is built)
+3. Select *LiveViewNativeCharts* in the sidebar

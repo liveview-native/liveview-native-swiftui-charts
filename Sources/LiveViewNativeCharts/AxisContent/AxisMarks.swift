@@ -40,7 +40,7 @@ import SwiftUI
 ///
 /// ```html
 /// <AxisMarks>
-///   <AxisGridLine modifiers={foreground_style(@native, primary: {:color, :red})} />
+///   <AxisGridLine class="fg-red" />
 /// </AxisMarks>
 /// ```
 ///

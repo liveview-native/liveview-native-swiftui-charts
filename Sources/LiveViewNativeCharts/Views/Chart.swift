@@ -16,18 +16,27 @@ import Charts
 ///
 /// ```html
 /// <Chart>
-///   <%= for item <- @data do %>
-///     <BarMark
-///       x={item.department}
-///       x:label="Department"
+///   <BarMark
+///     :for={item <- @data}
 ///
-///       y={item.profit}
-///       y:label="Profit"
+///     x:label="Department"
+///     x:value={item.department}
 ///
-///       modifiers={@native |> foreground_style(value: {"Product Category", item.product_category})}
-///     />
-///   <% end %>
+///     y:label="Profit"
+///     y:value={item.profit}
+///
+///     class="fg-product-category"
+///     product-category={item.product_category}
+///   />
 /// </Chart>
+/// ```
+///
+/// ```elixir
+/// ~SHEET""
+/// "fg-product-category" do
+///   foregroundStyle(by: .value("Product Category", attr("product-category")))
+/// end
+/// """
 /// ```
 ///
 /// - Note: Only some elements, such as marks, can be used in the content of a chart. Other types of elements are not supported.

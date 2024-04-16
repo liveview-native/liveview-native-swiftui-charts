@@ -52,8 +52,8 @@ final class LiveViewNativeChartsTests: XCTestCase {
     func testSimpleChart() async throws {
         try await assertMatch(
             #"""
-            <BarMark x="0" x:label="X" y="0" y:label="Y" />
-            <BarMark x="1" x:label="X" y="1" y:label="Y" />
+            <BarMark x:value="0" x:label="X" y:value="0" y:label="Y" />
+            <BarMark x:value="1" x:label="X" y:value="1" y:label="Y" />
             """#
         ) {
             BarMark(x: .value("X", 0.0), y: .value("Y", 0.0))
@@ -64,7 +64,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
     func testAreaMark() async throws {
         try await assertMatch(
             SampleData.scalar.map {
-                #"<AreaMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" />"#
+                #"<AreaMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.scalar, id: \.x) {
@@ -74,7 +74,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // series
         try await assertMatch(
             SampleData.series.map {
-                #"<AreaMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" series="\#($0.series)" series:label="Series" />"#
+                #"<AreaMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" series:value="\#($0.series)" series:label="Series" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(Array(SampleData.series.enumerated()), id: \.offset) { (_, element) in
@@ -84,7 +84,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // range
         try await assertMatch(
             SampleData.range.map {
-                #"<AreaMark x="\#($0.x)" x:label="X" y-start="\#($0.yStart)" y-start:label="Y Start" y-end="\#($0.yEnd)" y-end:label="Y End" />"#
+                #"<AreaMark x:value="\#($0.x)" x:label="X" yStart:value="\#($0.yStart)" yStart:label="Y Start" yEnd:value="\#($0.yEnd)" yEnd:label="Y End" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.range, id: \.x) {
@@ -94,7 +94,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // seriesRange
         try await assertMatch(
             SampleData.seriesRange.map {
-                #"<AreaMark x="\#($0.x)" x:label="X" y-start="\#($0.yStart)" y-start:label="Y Start" y-end="\#($0.yEnd)" y-end:label="Y End" series="\#($0.series)" series:label="Series" />"#
+                #"<AreaMark x:value="\#($0.x)" x:label="X" yStart:value="\#($0.yStart)" yStart:label="Y Start" yEnd:value="\#($0.yEnd)" yEnd:label="Y End" series="\#($0.series)" series:label="Series" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(Array(SampleData.seriesRange.enumerated()), id: \.offset) { (_, element) in
@@ -106,7 +106,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
     func testBarMark() async throws {
         try await assertMatch(
             SampleData.scalar.map {
-                #"<BarMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" />"#
+                #"<BarMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.scalar, id: \.x) {
@@ -116,7 +116,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // range
         try await assertMatch(
             SampleData.range.map {
-                #"<BarMark x="\#($0.x)" x:label="X" y-start="\#($0.yStart)" y-start:label="Y Start" y-end="\#($0.yEnd)" y-end:label="Y End" />"#
+                #"<BarMark x:value="\#($0.x)" x:label="X" yStart:value="\#($0.yStart)" yStart:label="Y Start" yEnd:value="\#($0.yEnd)" yEnd:label="Y End" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.range, id: \.x) {
@@ -128,7 +128,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
     func testLineMark() async throws {
         try await assertMatch(
             SampleData.scalar.map {
-                #"<LineMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" />"#
+                #"<LineMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.scalar, id: \.x) {
@@ -138,7 +138,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // series
         try await assertMatch(
             SampleData.series.map {
-                #"<LineMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" series="\#($0.series)" series:label="Series" />"#
+                #"<LineMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" series:value="\#($0.series)" series:label="Series" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(Array(SampleData.series.enumerated()), id: \.offset) { (_, element) in
@@ -150,7 +150,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
     func testPointMark() async throws {
         try await assertMatch(
             SampleData.scalar.map {
-                #"<PointMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" />"#
+                #"<PointMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.scalar, id: \.x) {
@@ -162,7 +162,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
     func testRectangleMark() async throws {
         try await assertMatch(
             SampleData.scalar.map {
-                #"<RectangleMark x="\#($0.x)" x:label="X" y="\#($0.y)" y:label="Y" />"#
+                #"<RectangleMark x:value="\#($0.x)" x:label="X" y:value="\#($0.y)" y:label="Y" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.scalar, id: \.x) {
@@ -172,7 +172,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // range
         try await assertMatch(
             SampleData.range.map {
-                #"<RectangleMark x="\#($0.x)" x:label="X" y-start="\#($0.yStart)" y-start:label="Y Start" y-end="\#($0.yEnd)" y-end:label="Y End" />"#
+                #"<RectangleMark x:value="\#($0.x)" x:label="X" yStart:value="\#($0.yStart)" yStart:label="Y Start" yEnd:value="\#($0.yEnd)" yEnd:label="Y End" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.range, id: \.x) {
@@ -185,7 +185,7 @@ final class LiveViewNativeChartsTests: XCTestCase {
         // range
         try await assertMatch(
             SampleData.range.map {
-                #"<RuleMark x="\#($0.x)" x:label="X" y-start="\#($0.yStart)" y-start:label="Y Start" y-end="\#($0.yEnd)" y-end:label="Y End" />"#
+                #"<RuleMark x:value="\#($0.x)" x:label="X" yStart:value="\#($0.yStart)" yStart:label="Y Start" yEnd:value="\#($0.yEnd)" yEnd:label="Y End" />"#
             }.joined(separator: "\n")
         ) {
             ForEach(SampleData.range, id: \.x) {
