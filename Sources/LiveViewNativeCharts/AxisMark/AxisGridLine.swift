@@ -17,7 +17,7 @@ import LiveViewNative
 /// <AxisMarks>
 ///   <AxisGridLine
 ///     centered
-///     modifiers={foreground_style(@native, primary: {:color, :red})}
+///     class="fg-red"
 ///   />
 /// </AxisMarks>
 /// ```

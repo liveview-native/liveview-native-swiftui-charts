@@ -19,7 +19,7 @@ import LiveViewNativeCore
 ///   <AxisTick
 ///     centered
 ///     length="longest-label"
-///     modifiers={foreground_style(@native, primary: {:color, :red})}
+///     class="fg-red"
 ///   />
 /// </AxisMarks>
 /// ```
