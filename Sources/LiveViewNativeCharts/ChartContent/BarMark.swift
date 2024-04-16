@@ -15,11 +15,11 @@ import LiveViewNative
 ///
 /// ```html
 /// <BarMark
-///   x={item.date}
 ///   x:label="Date"
+///   x:value={item.date}
 ///
-///   y={item.profit}
 ///   y:label="Profit"
+///   y:value={item.profit}
 /// />
 /// ```
 ///
@@ -29,37 +29,45 @@ import LiveViewNative
 ///
 /// ```html
 /// <BarMark
-///   x={item.profit}
 ///   x:label="Profit"
+///   x:value={item.profit}
 ///
-///   modifiers={@native |> foreground_style(value: {"Product", item.product})}
+///   class="fg-product"
+///   product={item.product}
 /// />
+/// ```
+///
+/// ```elixir
+/// ~SHEET"""
+/// "fg-product" do
+///   foregroundStyle(by: .value("Product", attr("product")))
+/// end
 /// ```
 ///
 /// - Note: The example above uses the ``ForegroundStyleModifier`` modifier to represent categories with colors.
 ///
-/// Use the `x-start`/`x-end` or `y-start`/`y-end` attributes to create an interval bar.
+/// Use the `xStart`/`xEnd` or `yStart`/`yEnd` attributes to create an interval bar.
 ///
 /// ```html
 /// <BarMark
-///   x-start={item.start}
-///   x-start:label="Start Time"
+///   xStart:label="Start Time"
+///   xStart:value={item.start}
 ///
-///   x-end={item.end}
-///   x-end:label="End Time"
+///   xEnd:label="End Time"
+///   xEnd:value={item.end}
 ///
-///   y={item.job}
 ///   y:label="Job"
+///   y:value={item.job}
 /// />
 /// ```
 ///
 /// ## Attributes
 /// * `x`
 /// * `y`
-/// * `x-start`
-/// * `x-end`
-/// * `y-start`
-/// * `y-end`
+/// * `xStart`
+/// * `xEnd`
+/// * `yStart`
+/// * `yEnd`
 /// * `width` - The bar width as a ``LiveViewNativeCharts/Charts/MarkDimension``
 /// * `height` - The bar height as a ``LiveViewNativeCharts/Charts/MarkDimension``
 /// * `stacking` - The ``LiveViewNativeCharts/Charts/MarkStackingMethod``

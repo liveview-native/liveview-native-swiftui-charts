@@ -128,23 +128,23 @@ struct AnyMark<M: MarkProtocol>: ChartContent {
             .flatMap(Double.init(_:))
             .flatMap(CGFloat.init(_:))
         
-        let xStart = element.plottable(named: "x-start")
-        let xEnd = element.plottable(named: "x-end")
+        let xStart = element.plottable(named: "xStart")
+        let xEnd = element.plottable(named: "xEnd")
         
-        let fixedXStart = element.attributeValue(for: "x-start")
+        let fixedXStart = element.attributeValue(for: "xStart")
             .flatMap(Double.init(_:))
             .flatMap(CGFloat.init(_:))
-        let fixedXEnd = element.attributeValue(for: "x-end")
+        let fixedXEnd = element.attributeValue(for: "xEnd")
             .flatMap(Double.init(_:))
             .flatMap(CGFloat.init(_:))
         
-        let yStart = element.plottable(named: "y-start")
-        let yEnd = element.plottable(named: "y-end")
+        let yStart = element.plottable(named: "yStart")
+        let yEnd = element.plottable(named: "yEnd")
         
-        let fixedYStart = element.attributeValue(for: "y-start")
+        let fixedYStart = element.attributeValue(for: "yStart")
             .flatMap(Double.init(_:))
             .flatMap(CGFloat.init(_:))
-        let fixedYEnd = element.attributeValue(for: "y-end")
+        let fixedYEnd = element.attributeValue(for: "yEnd")
             .flatMap(Double.init(_:))
             .flatMap(CGFloat.init(_:))
         

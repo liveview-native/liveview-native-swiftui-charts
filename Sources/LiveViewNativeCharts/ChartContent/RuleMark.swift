@@ -11,36 +11,36 @@ import LiveViewNative
 
 /// A mark that draws a horizontal or vertical line.
 ///
-/// Create a horizontal line by providing the `y` attribute, and optionally an `x-start`/`x-end`.
+/// Create a horizontal line by providing the `y` attribute, and optionally an `xStart`/`xEnd`.
 ///
 /// ```html
 /// <RuleMark
-///   y={5.8}
 ///   y:label="Minimum Height"
+///   y:value={5.8}
 /// />
 /// ```
 ///
-/// Create a vertical line by providing the `x` attribute, and optionally a `y-start`/`y-end`.
+/// Create a vertical line by providing the `x` attribute, and optionally a `yStart`/`yEnd`.
 ///
 /// ```html
 /// <RuleMark
-///   x={2.5}
 ///   x:label="Start Time"
+///   x:value={2.5}
 ///
-///   y-start={1}
-///   y-start:label="Start of Week"
-///   y-end={5}
-///   y-end:label="End of Week"
+///   yStart:label="Start of Week"
+///   yStart:value={1}
+///   yEnd:label="End of Week"
+///   yEnd:value={5}
 /// />
 /// ```
 ///
 /// ## Attributes
 /// * `x`
 /// * `y`
-/// * `x-start`
-/// * `x-end`
-/// * `y-start`
-/// * `y-end`
+/// * `xStart`
+/// * `xEnd`
+/// * `yStart`
+/// * `yEnd`
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif

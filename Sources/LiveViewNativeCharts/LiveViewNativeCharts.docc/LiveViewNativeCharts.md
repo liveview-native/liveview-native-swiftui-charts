@@ -62,11 +62,11 @@ defmodule MyAppWeb.ChartLive do
       <BarMark
         :for={item <- @data}
         
-        x={item.department}
         x:label="Department"
+        x:value={item.department}
 
-        y={item.profit}
         y:label="Profit"
+        y:value={item.profit}
 
         modifiers={@native |> foreground_style(value: {"Product Category", item.product_category})}
       />

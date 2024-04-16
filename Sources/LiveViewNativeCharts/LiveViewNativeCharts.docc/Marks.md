@@ -14,11 +14,11 @@ If no label is provided, it is assumed to be a fixed numeric value.
 ```html
 <%= for item <- @data do %>
   <BarMark
-    x={item.department}
     x:label="Department"
+    x:value={item.department}
 
-    y={item.profit}
     y:label="Profit"
+    y:value={item.profit}
   />
 <% end %>
 ```

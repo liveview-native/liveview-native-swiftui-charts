@@ -13,11 +13,11 @@ import LiveViewNative
 ///
 /// ```html
 /// <PointMark
-///   x={item.date}
 ///   x:label="Date"
+///   x:value={item.date}
 ///
-///   y={item.profit}
 ///   y:label="Profit"
+///   y:value={item.profit}
 /// />
 /// ```
 ///

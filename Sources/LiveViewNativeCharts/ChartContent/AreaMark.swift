@@ -14,11 +14,11 @@ import LiveViewNative
 ///
 /// ```html
 /// <AreaMark
-///   x={item.date}
 ///   x:label="Date"
+///   x:value={item.date}
 ///
-///   y={item.profit}
 ///   y:label="Profit"
+///   y:value={item.profit}
 /// />
 /// ```
 ///
@@ -27,23 +27,23 @@ import LiveViewNative
 ///
 /// ```html
 /// <AreaMark
-///   x={item.time}
 ///   x:label="Time"
+///   x:value={item.time}
 ///
-///   y-start={item.low}
-///   y-start:label="Low Temperature"
-///   y-end={item.high}
-///   y-end:label="High Temperature"
+///   yStart:label="Low Temperature"
+///   yStart:value={item.low}
+///   yEnd:label="High Temperature"
+///   yEnd:value={item.high}
 /// />
 /// ```
 ///
 /// ## Attributes
 /// * `x`
 /// * `y`
-/// * `x-start`
-/// * `x-end`
-/// * `y-start`
-/// * `y-end`
+/// * `xStart`
+/// * `xEnd`
+/// * `yStart`
+/// * `yEnd`
 /// * `series`
 /// * `stacking` - The ``LiveViewNativeCharts/Charts/MarkStackingMethod``
 #if swift(>=5.8)

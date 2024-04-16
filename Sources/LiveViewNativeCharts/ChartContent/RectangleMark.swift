@@ -15,47 +15,56 @@ import LiveViewNative
 ///
 /// ```html
 /// <RectangleMark
-///   x={item.positive}
 ///   x:label="Positive"
+///   x:value={item.positive}
 ///
-///   y={item.negative}
 ///   y:label="Negative"
+///   y:value={item.negative}
 ///
-///   modifiers={@native |> foreground_style(value: {"Number", item.num})}
+///   class="fg-number"
+///   number={item.num}
 /// />
 /// ```
 ///
-/// Provide an `x-start`/`x-end` and `y-start`/`y-end` to manually specify the area to fill.
+/// ```elixir
+/// ~SHEET"""
+/// "fg-number" do
+///   foregroundStyle(by: .value("Number", attr("number")))
+/// end
+/// """
+/// ```
+///
+/// Provide an `xStart`/`xEnd` and `yStart`/`yEnd` to manually specify the area to fill.
 ///
 /// ```html
 /// <RectangleMark
-///   x-start={item.x - 0.25}
-///   x-start:label="Rect Start Width"
-///   x-end={item.x + 0.25}
-///   x-end:label="Rect End Width"
-///   y-start={item.y - 0.25}
-///   y-start:label="Rect Start Height"
-///   y-end={item.y + 0.2}
-///   y-end:label="Rect End Height"
+///   xStart:label="Rect Start Width"
+///   xStart:value={item.x - 0.25}
+///   xEnd:label="Rect End Width"
+///   xEnd:value={item.x + 0.25}
+///   yStart:label="Rect Start Height"
+///   yStart:value={item.y - 0.25}
+///   yEnd:label="Rect End Height"
+///   yEnd:value={item.y + 0.2}
 ///
-///   modifiers={@native |> foreground_style(primary: {:color, :blue, [{:opacity, 0.5}]})}
+///   class="fg-blue"
 /// />
 ///
 /// <PointMark
-///   x={item.x}
 ///   x:label="X"
-///   y={item.y}
+///   x:value={item.x}
 ///   y:label="Y"
+///   y:value={item.y}
 /// />
 /// ```
 ///
 /// ## Attributes
 /// * `x`
 /// * `y`
-/// * `x-start`
-/// * `x-end`
-/// * `y-start`
-/// * `y-end`
+/// * `xStart`
+/// * `xEnd`
+/// * `yStart`
+/// * `yEnd`
 /// * `width` - The rectangle width as a ``LiveViewNativeCharts/Charts/MarkDimension``
 /// * `height` - The rectangle height as a ``LiveViewNativeCharts/Charts/MarkDimension``
 #if swift(>=5.8)

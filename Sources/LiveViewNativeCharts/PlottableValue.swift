@@ -19,9 +19,9 @@ extension ElementNode {
     /// * Date
     /// * Double
     /// * String
-    func plottable(named: AttributeName) -> (label: String, value: any Plottable)? {
-        guard let value = self.attributeValue(for: named),
-              let label = self.attributeValue(for: .init(namespace: named.rawValue, name: "label"))
+    func plottable(named: String) -> (label: String, value: any Plottable)? {
+        guard let value = self.attributeValue(for: .init(namespace: named, name: "value")),
+              let label = self.attributeValue(for: .init(namespace: named, name: "label"))
         else { return nil }
         if let date = try? Date(value, strategy: .elixirDateTimeOrDate) {
             return (label, date)
@@ -52,7 +52,7 @@ extension ElementNode {
 #endif
 struct AnyPlottableValue: ParseableModifierValue {
     let label: Label
-    let value: AnyPlottable
+    let value: AttributeReference<AnyPlottable>
     
     enum Label {
         case constant(String)
@@ -71,29 +71,43 @@ struct AnyPlottableValue: ParseableModifierValue {
         
         let value: AnyPlottableValue
         
-        init(_ label: TextReference, _ value: AnyPlottable) {
+        init(_ label: TextReference, _ value: AttributeReference<AnyPlottable>) {
             self.value = .init(label: .text(label), value: value)
         }
         
-        init(_ label: String, _ value: AnyPlottable) {
+        init(_ label: String, _ value: AttributeReference<AnyPlottable>) {
             self.value = .init(label: .constant(label), value: value)
         }
     }
 }
 
-struct AnyPlottable: ParseableModifierValue {
-    private let _resolve: (ElementNode) -> any Plottable
+struct AnyPlottable: ParseableModifierValue, AttributeDecodable {
+    let value: any Plottable
     
     static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
         OneOf {
-            AttributeReference<Int>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
-            AttributeReference<Double>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
-            AttributeReference<Date>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
-            AttributeReference<String>.parser(in: context).map({ Self.init(_resolve: $0.resolve) })
+            Int.parser(in: context).map({ Self.init(value: $0) })
+            Double.parser(in: context).map({ Self.init(value: $0) })
+            Date.parser(in: context).map({ Self.init(value: $0) })
+            String.parser(in: context).map({ Self.init(value: $0) })
         }
     }
     
-    func resolve(on element: ElementNode) -> any Plottable {
-        _resolve(element)
+    init(value: any Plottable) {
+        self.value = value
+    }
+    
+    init(from attribute: Attribute?, on element: ElementNode) throws {
+        if let intValue = try? Int.init(from: attribute, on: element) {
+            self.value = intValue
+        } else if let doubleValue = try? Double.init(from: attribute, on: element) {
+            self.value = doubleValue
+        } else if let dateValue = try? Date.init(from: attribute, on: element) {
+            self.value = dateValue
+        } else if let stringValue = try? String.init(from: attribute, on: element) {
+            self.value = stringValue
+        } else {
+            throw AttributeDecodingError.badValue(Self.self)
+        }
     }
 }
