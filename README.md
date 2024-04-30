@@ -10,7 +10,7 @@
 
 ## Usage
 
-Import `LiveViewNativeCharts` and add the `ChartsRegistry` to the list of addons on your `LiveView`:
+Import `LiveViewNativeCharts` and add `.charts` to the list of addons on your `LiveView`:
 
 ```swift
 import SwiftUI
@@ -21,7 +21,7 @@ struct ContentView: View {
     var body: some View {
         #LiveView(
             .localhost,
-            addons: [ChartsRegistry<_>.self]
+            addons: [.charts]
         )
     }
 }
