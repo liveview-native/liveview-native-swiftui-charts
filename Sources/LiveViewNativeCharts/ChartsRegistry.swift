@@ -30,6 +30,7 @@ public extension Addons {
         public struct CustomModifier: ViewModifier, ParseableModifierValue {
             enum Storage {
                 case chartBackground(ChartBackgroundModifier<Root>)
+                case chartLegend(ChartLegendModifier<Root>)
                 case chartOverlay(ChartOverlayModifier<Root>)
                 case chartXAxis(ChartXAxisModifier<Root>)
                 case chartYAxis(ChartYAxisModifier<Root>)
@@ -40,6 +41,7 @@ public extension Addons {
             public static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
                 CustomModifierGroupParser(output: Self.self) {
                     ChartBackgroundModifier<Root>.parser(in: context).map({ Self(storage: .chartBackground($0)) })
+                    ChartLegendModifier<Root>.parser(in: context).map({ Self(storage: .chartLegend($0)) })
                     ChartOverlayModifier<Root>.parser(in: context).map({ Self(storage: .chartOverlay($0)) })
                     ChartXAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartXAxis($0)) })
                     ChartYAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartYAxis($0)) })
@@ -52,6 +54,8 @@ public extension Addons {
             public func body(content: Content) -> some View {
                 switch storage {
                 case .chartBackground(let modifier):
+                    content.modifier(modifier)
+                case .chartLegend(let modifier):
                     content.modifier(modifier)
                 case .chartOverlay(let modifier):
                     content.modifier(modifier)

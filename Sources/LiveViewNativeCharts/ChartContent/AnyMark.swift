@@ -121,32 +121,20 @@ struct AnyMark<M: MarkProtocol>: ChartContent {
         let x = element.plottable(named: "x")
         let y = element.plottable(named: "y")
         
-        let fixedX = element.attributeValue(for: "x")
-            .flatMap(Double.init(_:))
-            .flatMap(CGFloat.init(_:))
-        let fixedY = element.attributeValue(for: "y")
-            .flatMap(Double.init(_:))
-            .flatMap(CGFloat.init(_:))
+        let fixedX = try? element.attributeValue(CGFloat.self, for: "x")
+        let fixedY = try? element.attributeValue(CGFloat.self, for: "y")
         
         let xStart = element.plottable(named: "xStart")
         let xEnd = element.plottable(named: "xEnd")
         
-        let fixedXStart = element.attributeValue(for: "xStart")
-            .flatMap(Double.init(_:))
-            .flatMap(CGFloat.init(_:))
-        let fixedXEnd = element.attributeValue(for: "xEnd")
-            .flatMap(Double.init(_:))
-            .flatMap(CGFloat.init(_:))
+        let fixedXStart = try? element.attributeValue(CGFloat.self, for: "xStart")
+        let fixedXEnd = try? element.attributeValue(CGFloat.self, for: "xEnd")
         
         let yStart = element.plottable(named: "yStart")
         let yEnd = element.plottable(named: "yEnd")
         
-        let fixedYStart = element.attributeValue(for: "yStart")
-            .flatMap(Double.init(_:))
-            .flatMap(CGFloat.init(_:))
-        let fixedYEnd = element.attributeValue(for: "yEnd")
-            .flatMap(Double.init(_:))
-            .flatMap(CGFloat.init(_:))
+        let fixedYStart = try? element.attributeValue(CGFloat.self, for: "yStart")
+        let fixedYEnd = try? element.attributeValue(CGFloat.self, for: "yEnd")
         
         let series = element.plottable(named: "series")
         
