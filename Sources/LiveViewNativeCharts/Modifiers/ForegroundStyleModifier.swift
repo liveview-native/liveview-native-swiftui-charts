@@ -17,13 +17,13 @@ struct ForegroundStyleModifier: ContentModifier {
     static let name = "foregroundStyle"
     
     enum Storage {
-        case primary(AnyShapeStyle)
+        case primary(AnyShapeStyle.Resolvable)
         case value(AnyPlottableValue)
     }
     
     let storage: Storage
     
-    init(_ primary: AnyShapeStyle) {
+    init(_ primary: AnyShapeStyle.Resolvable) {
         self.storage = .primary(primary)
     }
     
@@ -38,12 +38,12 @@ struct ForegroundStyleModifier: ContentModifier {
     ) -> Builder.Content {
         switch storage {
         case let .primary(primary):
-            return content.foregroundStyle(primary)
+            return content.foregroundStyle(primary.resolve(on: element, in: LiveContext<R>()))
         case let .value(value):
             return unbox(
                 content: content,
                 label: value.label,
-                value.value.resolve(on: element).value,
+                value.value.resolve(on: element, in: LiveContext<R>()).value,
                 on: element,
                 in: context
             )
@@ -72,9 +72,9 @@ struct AxisMarkForegroundStyleModifier: ContentModifier {
     
     static let name = "foregroundStyle"
     
-    let primary: AnyShapeStyle
+    let primary: AnyShapeStyle.Resolvable
     
-    init(_ primary: AnyShapeStyle) {
+    init(_ primary: AnyShapeStyle.Resolvable) {
         self.primary = primary
     }
     
@@ -83,6 +83,6 @@ struct AxisMarkForegroundStyleModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        return content.foregroundStyle(primary)
+        return content.foregroundStyle(primary.resolve(on: element, in: LiveContext<R>()))
     }
 }
