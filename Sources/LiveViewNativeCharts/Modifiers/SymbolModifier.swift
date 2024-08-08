@@ -41,7 +41,7 @@ enum SymbolModifier: ContentModifier {
         case .shape(let shape):
             return content.symbol(shape)
         case .value(let value):
-            return unbox(content: content, label: value.label, value.value.resolve(on: element, in: LiveContext<R>()).value, on: element, in: context)
+            return unbox(content: content, label: value.label, value.value.resolve(on: element, in: context.context).value, on: element, in: context)
         case .view(let view):
             return content
                 .symbol {

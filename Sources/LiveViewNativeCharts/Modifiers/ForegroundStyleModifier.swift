@@ -38,12 +38,12 @@ struct ForegroundStyleModifier: ContentModifier {
     ) -> Builder.Content {
         switch storage {
         case let .primary(primary):
-            return content.foregroundStyle(primary.resolve(on: element, in: LiveContext<R>()))
+            return content.foregroundStyle(primary.resolve(on: element, in: context.context))
         case let .value(value):
             return unbox(
                 content: content,
                 label: value.label,
-                value.value.resolve(on: element, in: LiveContext<R>()).value,
+                value.value.resolve(on: element, in: context.context).value,
                 on: element,
                 in: context
             )
@@ -83,6 +83,6 @@ struct AxisMarkForegroundStyleModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        return content.foregroundStyle(primary.resolve(on: element, in: LiveContext<R>()))
+        return content.foregroundStyle(primary.resolve(on: element, in: context.context))
     }
 }
