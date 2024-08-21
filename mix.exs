@@ -1,10 +1,12 @@
-defmodule LiveViewNativeSwiftUiCharts.MixProject do
+defmodule LiveViewNative.SwiftUI.Charts.MixProject do
   use Mix.Project
+
+  @version "0.3.0"
 
   def project do
     [
-      app: :live_view_native_swift_ui_charts,
-      version: "0.1.0",
+      app: :live_view_native_swiftui_charts,
+      version: @version,
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -21,7 +23,7 @@ defmodule LiveViewNativeSwiftUiCharts.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:live_view_native_swift_ui, "~> 0.0.9"},
+      {:live_view_native_swiftui, "~> 0.3.0""},
     ]
   end
 end
