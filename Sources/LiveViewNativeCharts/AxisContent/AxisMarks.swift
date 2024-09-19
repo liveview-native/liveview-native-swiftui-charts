@@ -140,7 +140,7 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
                 .compactMap {
                     try? $0.attributes
                         .first(where: { $0.name == "value" })
-                        .map(Double.init)
+                        .map({ try Double.init(from: $0, on: element) })
                 }
             Charts.AxisMarks(preset: preset, position: position, values: values) { (value: Charts.AxisValue) in
                 AnyAxisMark(
@@ -148,7 +148,8 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
                         children.filter({
                             (try? $0.attributes
                                 .first(where: { $0.name == "value" })
-                                .map(Double.init))
+                                .map({ try Double.init(from: $0, on: element) })
+                            )
                             == value.as(Double.self)
                         }),
                         with: AxisMarkBuilder.self,
@@ -297,30 +298,30 @@ extension AxisMarkValues {
                 if let minimumStride = try? element.attributeValue(Double.self, for: "minimum-stride") {
                     self = .automatic(
                         minimumStride: minimumStride,
-                        desiredCount: try? element.attributeValue(Int.self, for: "desired-count"),
-                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound")
+                        desiredCount: try? element.attributeValue(Int.self, for: "desiredCount"),
+                        roundLowerBound: element.attributeBoolean(for: "roundLowerBound"),
+                        roundUpperBound: element.attributeBoolean(for: "roundUpperBound")
                     )
                 } else {
                     self = .automatic(
-                        desiredCount: try? element.attributeValue(Int.self, for: "desired-count"),
-                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound")
+                        desiredCount: try? element.attributeValue(Int.self, for: "desiredCount"),
+                        roundLowerBound: element.attributeBoolean(for: "roundLowerBound"),
+                        roundUpperBound: element.attributeBoolean(for: "roundUpperBound")
                     )
                 }
             case "stride":
                 if let numeric = try? element.attributeValue(Double.self, for: "stride") {
                     self = .stride(
                         by: numeric,
-                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound")
+                        roundLowerBound: element.attributeBoolean(for: "roundLowerBound"),
+                        roundUpperBound: element.attributeBoolean(for: "roundUpperBound")
                     )
                 } else if let component = try? element.attributeValue(Calendar.Component.self, for: "stride") {
                     self = .stride(
                         by: component,
                         count: (try? element.attributeValue(Int.self, for: "count")) ?? 1,
-                        roundLowerBound: element.attributeBoolean(for: "round-lower-bound"),
-                        roundUpperBound: element.attributeBoolean(for: "round-upper-bound"),
+                        roundLowerBound: element.attributeBoolean(for: "roundLowerBound"),
+                        roundUpperBound: element.attributeBoolean(for: "roundUpperBound"),
                         calendar: (try? element.attributeValue(Calendar.Identifier.self, for: "calendar")).flatMap(Calendar.init(identifier:))
                     )
                 }
@@ -430,7 +431,7 @@ extension Calendar.Identifier: AttributeDecodable {
 }
 
 extension StrokeStyle: AttributeDecodable {
-    public init(from attribute: LiveViewNativeCore.Attribute?) throws {
-        self = .init(lineWidth: try Double(from: attribute))
+    public init(from attribute: LiveViewNativeCore.Attribute?, on element: ElementNode) throws {
+        self = .init(lineWidth: try Double(from: attribute, on: element))
     }
 }
