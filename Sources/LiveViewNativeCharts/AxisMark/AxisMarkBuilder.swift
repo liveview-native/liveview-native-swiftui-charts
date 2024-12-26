@@ -79,6 +79,7 @@ struct AxisMarkBuilder: ContentBuilder {
     }
 }
 
+@MainActor
 protocol ComposedAxisMark {
     associatedtype Body: AxisMark
     @Charts.AxisMarkBuilder

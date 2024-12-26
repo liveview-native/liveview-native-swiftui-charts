@@ -29,6 +29,7 @@ import LiveViewNative
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
+@MainActor
 struct AxisValue<R: RootRegistry>: ComposedAxisMark {
     let element: ElementNode
     let context: AxisMarkBuilder.Context<R>
