@@ -37,6 +37,7 @@ import LiveViewNativeCore
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
+@MainActor
 struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
     let element: ElementNode
     let context: AxisMarkBuilder.Context<R>
@@ -136,6 +137,10 @@ struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
                 fatalError("Unknown format '\(format)'")
             }
         } else {
+            let childViews = AxisMarkBuilder.buildChildViews(
+                of: element,
+                in: context
+            )
             Charts.AxisValueLabel(
                 centered: centered,
                 anchor: anchor,
@@ -146,10 +151,7 @@ struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
                 horizontalSpacing: horizontalSpacing,
                 verticalSpacing: verticalSpacing
             ) {
-                AxisMarkBuilder.buildChildViews(
-                    of: element,
-                    in: context
-                )
+                childViews
             }
         }
     }

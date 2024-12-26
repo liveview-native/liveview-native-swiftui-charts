@@ -70,6 +70,7 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
     let element: ElementNode
     let context: AxisContentBuilder.Context<R>
     
+    @MainActor
     var body: some AxisContent {
         let preset = (try? element.attributeValue(AxisMarkPreset.self, for: "preset")) ?? .automatic
         let position = (try? element.attributeValue(AxisMarkPosition.self, for: "position")) ?? .automatic
@@ -138,7 +139,7 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
             let children = element.children()
             let values = children
                 .compactMap {
-                    try? $0.attributes
+                    try? $0.attributes()
                         .first(where: { $0.name == "value" })
                         .map({ try Double.init(from: $0, on: element) })
                 }
@@ -146,7 +147,7 @@ struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
                 AnyAxisMark(
                     try! AxisContentBuilder.build(
                         children.filter({
-                            (try? $0.attributes
+                            (try? $0.attributes()
                                 .first(where: { $0.name == "value" })
                                 .map({ try Double.init(from: $0, on: element) })
                             )
