@@ -157,7 +157,7 @@ struct AxisValueLabel<R: RootRegistry>: ComposedAxisMark {
     }
 }
 
-extension AxisValueLabelCollisionResolution: AttributeDecodable {
+extension AxisValueLabelCollisionResolution: @retroactive AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value
         else { throw AttributeDecodingError.missingAttribute(Self.self) }
@@ -172,7 +172,7 @@ extension AxisValueLabelCollisionResolution: AttributeDecodable {
     }
 }
 
-extension AxisValueLabelOrientation: AttributeDecodable {
+extension AxisValueLabelOrientation: @retroactive AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value
         else { throw AttributeDecodingError.missingAttribute(Self.self) }

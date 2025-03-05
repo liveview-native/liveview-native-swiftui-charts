@@ -52,7 +52,7 @@ struct AxisTick: ComposedAxisMark {
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
-extension Charts.AxisTick.Length: AttributeDecodable {
+extension Charts.AxisTick.Length: @retroactive AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value
         else { throw AttributeDecodingError.missingAttribute(Self.self) }

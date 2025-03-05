@@ -22,18 +22,22 @@ struct AxisMarkBuilder: ContentBuilder {
         case axisValueLabel = "AxisValueLabel"
     }
     
-    enum ModifierType: ContentModifier {
+    enum ModifierType: ContentModifier, @preconcurrency Decodable {
         typealias Builder = AxisMarkBuilder
         
         case font(FontModifier)
         case foregroundStyle(AxisMarkForegroundStyleModifier)
         case offset(AxisMarkOffsetModifier)
         
-        static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-            OneOf {
-                FontModifier.parser(in: context).map(Self.font)
-                AxisMarkForegroundStyleModifier.parser(in: context).map(Self.foregroundStyle)
-                AxisMarkOffsetModifier.parser(in: context).map(Self.offset)
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            
+            if let modifier = try? container.decode(FontModifier.self) {
+                self = .font(modifier)
+            } else if let modifier = try? container.decode(AxisMarkForegroundStyleModifier.self) {
+                self = .foregroundStyle(modifier)
+            } else {
+                self = .offset(try container.decode(AxisMarkOffsetModifier.self))
             }
         }
         

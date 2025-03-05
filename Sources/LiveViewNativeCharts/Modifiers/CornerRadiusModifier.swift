@@ -10,11 +10,9 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct CornerRadiusModifier: ContentModifier {
+@ASTDecodable("cornerRadius")
+struct CornerRadiusModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
-    
-    static let name = "cornerRadius"
     
     private let radius: CGFloat
     private let style: RoundedCornerStyle

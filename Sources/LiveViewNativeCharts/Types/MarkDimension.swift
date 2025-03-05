@@ -16,7 +16,7 @@ import LiveViewNativeCore
 /// * A fixed number: `75`
 /// * A ratio with the `%` suffix: `50%`
 /// * An inset with the `-` prefix: `-10`
-extension MarkDimension: AttributeDecodable {
+extension MarkDimension: @retroactive AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value
         else { throw AttributeDecodingError.missingAttribute(Self.self) }

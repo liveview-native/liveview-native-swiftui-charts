@@ -10,12 +10,10 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct ChartXAxisModifier<R: RootRegistry>: ViewModifier {
-    static var name: String { "chartXAxis" }
-    
+@ASTDecodable("chartXAxis")
+struct ChartXAxisModifier<R: RootRegistry>: ViewModifier, @preconcurrency Decodable {
     enum Storage {
-        case visibility(Visibility)
+        case visibility(Visibility.Resolvable)
         case content(ViewReference)
     }
     let storage: Storage
@@ -23,7 +21,7 @@ struct ChartXAxisModifier<R: RootRegistry>: ViewModifier {
     @ObservedElement(observeChildren: true) private var element
     @ContentBuilderContext<R, AxisContentBuilder> private var context
     
-    init(_ visibility: Visibility) {
+    init(_ visibility: Visibility.Resolvable) {
         self.storage = .visibility(visibility)
     }
     
@@ -34,7 +32,7 @@ struct ChartXAxisModifier<R: RootRegistry>: ViewModifier {
     func body(content: Content) -> some View {
         switch self.storage {
         case let .visibility(visibility):
-            content.chartXAxis(visibility)
+            content.chartXAxis(visibility.resolve(on: element, in: context))
         case let .content(reference):
             content.chartXAxis {
                 AnyAxisContent(

@@ -9,15 +9,14 @@ import Charts
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct AlignsMarkStylesWithPlotAreaModifier: ContentModifier {
+@ASTDecodable("alignsMarkStylesWithPlotArea")
+@MainActor
+struct AlignsMarkStylesWithPlotAreaModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
     
-    static let name = "alignsMarkStylesWithPlotArea"
+    let aligns: AttributeReference<Bool>
     
-    let aligns: Bool
-    
-    init(aligns: Bool) {
+    init(aligns: AttributeReference<Bool>) {
         self.aligns = aligns
     }
     
@@ -26,6 +25,6 @@ struct AlignsMarkStylesWithPlotAreaModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.alignsMarkStylesWithPlotArea(aligns)
+        content.alignsMarkStylesWithPlotArea(aligns.resolve(on: element, in: context))
     }
 }

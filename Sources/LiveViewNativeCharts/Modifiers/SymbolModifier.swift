@@ -10,17 +10,16 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-enum SymbolModifier: ContentModifier {
+@ASTDecodable("symbol")
+@MainActor
+enum SymbolModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
     
-    static let name = "symbol"
-    
-    case shape(BasicChartSymbolShape)
+    case shape(BasicChartSymbolShape.Resolvable)
     case value(AnyPlottableValue)
     case view(ViewReference)
     
-    init(_ symbol: BasicChartSymbolShape) {
+    init(_ symbol: BasicChartSymbolShape.Resolvable) {
         self = .shape(symbol)
     }
     
@@ -39,9 +38,10 @@ enum SymbolModifier: ContentModifier {
     ) -> Builder.Content {
         switch self {
         case .shape(let shape):
-            return content.symbol(shape)
+            return content.symbol(shape.resolve(on: element, in: context))
         case .value(let value):
-            return unbox(content: content, label: value.label, value.value.resolve(on: element, in: context.context).value, on: element, in: context)
+            let resolvedValue = value.value.resolve(on: element, in: context).value
+            return unbox(content: content, label: value.label, resolvedValue, on: element, in: context)
         case .view(let view):
             return content
                 .symbol {

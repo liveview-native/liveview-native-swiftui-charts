@@ -50,46 +50,39 @@ extension ElementNode {
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
-struct AnyPlottableValue: ParseableModifierValue {
+@ASTDecodable("PlottableValue")
+struct AnyPlottableValue: @preconcurrency Decodable {
     let label: Label
     let value: AttributeReference<AnyPlottable>
+    
+    static func value(_ label: TextReference, _ value: AttributeReference<AnyPlottable>) -> Self {
+        .init(label: .text(label), value: value)
+    }
+    
+    static func value(_ label: String, _ value: AttributeReference<AnyPlottable>) -> Self {
+        .init(label: .constant(label), value: value)
+    }
     
     enum Label {
         case constant(String)
         case text(TextReference)
     }
-    
-    static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-        ImplicitStaticMember {
-            ParseablePlottableValue.parser(in: context).map(\.value)
-        }
-    }
-    
-    @ParseableExpression
-    struct ParseablePlottableValue {
-        static var name: String { "value" }
-        
-        let value: AnyPlottableValue
-        
-        init(_ label: TextReference, _ value: AttributeReference<AnyPlottable>) {
-            self.value = .init(label: .text(label), value: value)
-        }
-        
-        init(_ label: String, _ value: AttributeReference<AnyPlottable>) {
-            self.value = .init(label: .constant(label), value: value)
-        }
-    }
 }
 
-struct AnyPlottable: ParseableModifierValue, AttributeDecodable {
+struct AnyPlottable: Decodable, AttributeDecodable {
     let value: any Plottable
     
-    static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-        OneOf {
-            Int.parser(in: context).map({ Self.init(value: $0) })
-            Double.parser(in: context).map({ Self.init(value: $0) })
-            Date.parser(in: context).map({ Self.init(value: $0) })
-            String.parser(in: context).map({ Self.init(value: $0) })
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        if let value = try? container.decode(Int.self) {
+            self.value = value
+        } else if let value = try? container.decode(Double.self) {
+            self.value = value
+        } else if let value = try? container.decode(Date.self) {
+            self.value = value
+        } else {
+            self.value = try container.decode(String.self)
         }
     }
     

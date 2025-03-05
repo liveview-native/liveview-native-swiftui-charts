@@ -9,15 +9,14 @@ import Charts
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct InterpolationMethodModifier: ContentModifier {
+@ASTDecodable("interpolationMethod")
+@MainActor
+struct InterpolationMethodModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
     
-    static let name = "interpolationMethod"
+    let method: InterpolationMethod.Resolvable
     
-    let method: InterpolationMethod
-    
-    init(_ method: InterpolationMethod) {
+    init(_ method: InterpolationMethod.Resolvable) {
         self.method = method
     }
     
@@ -26,6 +25,6 @@ struct InterpolationMethodModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.interpolationMethod(method)
+        content.interpolationMethod(method.resolve(on: element, in: context))
     }
 }

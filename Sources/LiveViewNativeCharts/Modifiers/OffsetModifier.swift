@@ -9,16 +9,15 @@ import Charts
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct OffsetModifier: ContentModifier {
+@ASTDecodable("offset")
+@MainActor
+struct OffsetModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
     
-    static let name = "offset"
+    let x: Double.Resolvable
+    let y: Double.Resolvable
     
-    let x: Double
-    let y: Double
-    
-    init(x: Double, y: Double) {
+    init(x: Double.Resolvable, y: Double.Resolvable) {
         self.x = x
         self.y = y
     }
@@ -28,20 +27,21 @@ struct OffsetModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.offset(x: x, y: y)
+        content.offset(x: x.resolve(on: element, in: context), y: y.resolve(on: element, in: context))
     }
 }
 
-@ParseableExpression
-struct AxisMarkOffsetModifier: ContentModifier {
+@ASTDecodable("offset")
+@MainActor
+struct AxisMarkOffsetModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = AxisMarkBuilder
     
     static let name = "offset"
     
-    let x: Double
-    let y: Double
+    let x: Double.Resolvable
+    let y: Double.Resolvable
     
-    init(x: Double = 0, y: Double = 0) {
+    init(x: Double.Resolvable = .__constant(0), y: Double.Resolvable = .__constant(0)) {
         self.x = x
         self.y = y
     }
@@ -51,6 +51,6 @@ struct AxisMarkOffsetModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.offset(x: x, y: y)
+        content.offset(x: x.resolve(on: element, in: context), y: y.resolve(on: element, in: context))
     }
 }
