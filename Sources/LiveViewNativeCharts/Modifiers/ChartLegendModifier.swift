@@ -38,13 +38,13 @@ struct ChartLegendModifier<R: RootRegistry>: ViewModifier, @preconcurrency Decod
     
     @MainActor
     init(
-        position: AttributeReference<AnnotationPosition.Resolvable> = .constant(.automatic),
+        position: AttributeReference<AnnotationPosition.Resolvable>? = nil,
         alignment: Alignment.Resolvable? = nil,
         spacing: CGFloat.Resolvable? = nil,
         content: ViewReference
     ) {
         self.storage = .content(
-            position: position,
+            position: position ?? .constant(.automatic),
             alignment: alignment,
             spacing: spacing,
             content: content
@@ -53,12 +53,12 @@ struct ChartLegendModifier<R: RootRegistry>: ViewModifier, @preconcurrency Decod
     
     @MainActor
     init(
-        position: AttributeReference<AnnotationPosition.Resolvable> = .constant(.automatic),
+        position: AttributeReference<AnnotationPosition.Resolvable>? = nil,
         alignment: Alignment.Resolvable? = nil,
         spacing: CGFloat.Resolvable? = nil
     ) {
         self.storage = .position(
-            position: position,
+            position: position ?? .constant(.automatic),
             alignment: alignment,
             spacing: spacing
         )
