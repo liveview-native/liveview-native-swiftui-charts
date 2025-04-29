@@ -66,7 +66,7 @@ import SwiftUI
 #if swift(>=5.8)
 @_documentation(visibility: public)
 #endif
-struct AxisMarks<R: RootRegistry>: ComposedAxisContent {
+struct AxisMarks<R: RootRegistry>: @preconcurrency ComposedAxisContent {
     let element: ElementNode
     let context: AxisContentBuilder.Context<R>
     

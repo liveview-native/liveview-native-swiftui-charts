@@ -20,6 +20,7 @@ public extension Addons {
             case chart = "Chart"
         }
         
+        @MainActor
         public static func lookup(_ name: TagName, element: ElementNode) -> some View {
             switch name {
             case .chart:
@@ -27,7 +28,7 @@ public extension Addons {
             }
         }
         
-        public struct CustomModifier: ViewModifier, ParseableModifierValue {
+        public struct CustomModifier: ViewModifier, @preconcurrency Decodable {
             enum Storage {
                 case chartBackground(ChartBackgroundModifier<Root>)
                 case chartLegend(ChartLegendModifier<Root>)
@@ -38,16 +39,19 @@ public extension Addons {
             }
             let storage: Storage
             
-            public static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-                CustomModifierGroupParser(output: Self.self) {
-                    ChartBackgroundModifier<Root>.parser(in: context).map({ Self(storage: .chartBackground($0)) })
-                    ChartLegendModifier<Root>.parser(in: context).map({ Self(storage: .chartLegend($0)) })
-                    ChartOverlayModifier<Root>.parser(in: context).map({ Self(storage: .chartOverlay($0)) })
-                    ChartXAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartXAxis($0)) })
-                    ChartYAxisModifier<Root>.parser(in: context).map({ Self(storage: .chartYAxis($0)) })
-                    ChartContentBuilder.ModifierType.parser(in: context).map({ _ in Self(storage: .noop) })
-                    AxisContentBuilder.ModifierType.parser(in: context).map({ _ in Self(storage: .noop) })
-                    AxisMarkBuilder.ModifierType.parser(in: context).map({ _ in Self(storage: .noop) })
+            public init(from decoder: any Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                
+                if let modifier = try? container.decode(ChartBackgroundModifier<Root>.self) {
+                    self.storage = .chartBackground(modifier)
+                } else if let modifier = try? container.decode(ChartLegendModifier<Root>.self) {
+                    self.storage = .chartLegend(modifier)
+                } else if let modifier = try? container.decode(ChartOverlayModifier<Root>.self) {
+                    self.storage = .chartOverlay(modifier)
+                } else if let modifier = try? container.decode(ChartXAxisModifier<Root>.self) {
+                    self.storage = .chartXAxis(modifier)
+                } else {
+                    self.storage = .chartYAxis(try container.decode(ChartYAxisModifier<Root>.self))
                 }
             }
             

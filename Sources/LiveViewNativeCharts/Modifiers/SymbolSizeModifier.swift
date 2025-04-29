@@ -10,11 +10,10 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct SymbolSizeModifier: ContentModifier {
+@ASTDecodable("symbolSize")
+@MainActor
+struct SymbolSizeModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
-    
-    static let name = "symbolSize"
     
     enum Storage {
         case value(AnyPlottableValue)
@@ -43,7 +42,8 @@ struct SymbolSizeModifier: ContentModifier {
     ) -> Builder.Content {
         switch storage {
         case let .value(value):
-            return unbox(content: content, label: value.label, value.value.resolve(on: element, in: context.context).value, on: element, in: context)
+            let resolvedValue = value.value.resolve(on: element, in: context).value
+            return unbox(content: content, label: value.label, resolvedValue, on: element, in: context)
         case let .area(area):
             return content.symbolSize(area)
         case let .size(size):

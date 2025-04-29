@@ -10,23 +10,21 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct ChartBackgroundModifier<R: RootRegistry>: ViewModifier {
-    static var name: String { "chartBackground" }
-    
-    let alignment: Alignment
+@ASTDecodable("chartBackground")
+struct ChartBackgroundModifier<R: RootRegistry>: ViewModifier, @preconcurrency Decodable {
+    let alignment: Alignment.Resolvable
     let content: ViewReference
     
     @ObservedElement private var element
     @LiveContext<R> private var context
     
-    init(alignment: Alignment, content: ViewReference) {
+    init(alignment: Alignment.Resolvable, content: ViewReference) {
         self.alignment = alignment
         self.content = content
     }
 
     func body(content: Content) -> some View {
-        content.chartBackground(alignment: self.alignment) { _ in
+        content.chartBackground(alignment: self.alignment.resolve(on: element, in: context)) { _ in
             self.content.resolve(on: element, in: context)
         }
     }

@@ -25,7 +25,7 @@ struct ChartContentBuilder: ContentBuilder {
         case ruleMark = "RuleMark"
     }
     
-    enum ModifierType: ContentModifier {
+    enum ModifierType: ContentModifier, @preconcurrency Decodable {
         typealias Builder = ChartContentBuilder
         
         case alignsMarkStylesWithPlotArea(AlignsMarkStylesWithPlotAreaModifier)
@@ -37,16 +37,25 @@ struct ChartContentBuilder: ContentBuilder {
         case symbolSize(SymbolSizeModifier)
         case zIndex(ZIndexModifier)
         
-        static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-            OneOf {
-                AlignsMarkStylesWithPlotAreaModifier.parser(in: context).map(Self.alignsMarkStylesWithPlotArea)
-                CornerRadiusModifier.parser(in: context).map(Self.cornerRadius)
-                ForegroundStyleModifier.parser(in: context).map(Self.foregroundStyle)
-                InterpolationMethodModifier.parser(in: context).map(Self.interpolationMethod)
-                OffsetModifier.parser(in: context).map(Self.offset)
-                SymbolModifier.parser(in: context).map(Self.symbol)
-                SymbolSizeModifier.parser(in: context).map(Self.symbolSize)
-                ZIndexModifier.parser(in: context).map(Self.zIndex)
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            
+            if let modifier = try? container.decode(AlignsMarkStylesWithPlotAreaModifier.self) {
+                self = .alignsMarkStylesWithPlotArea(modifier)
+            } else if let modifier = try? container.decode(CornerRadiusModifier.self) {
+                self = .cornerRadius(modifier)
+            } else if let modifier = try? container.decode(ForegroundStyleModifier.self) {
+                self = .foregroundStyle(modifier)
+            } else if let modifier = try? container.decode(InterpolationMethodModifier.self) {
+                self = .interpolationMethod(modifier)
+            } else if let modifier = try? container.decode(OffsetModifier.self) {
+                self = .offset(modifier)
+            } else if let modifier = try? container.decode(SymbolModifier.self) {
+                self = .symbol(modifier)
+            } else if let modifier = try? container.decode(SymbolSizeModifier.self) {
+                self = .symbolSize(modifier)
+            } else {
+                self = .zIndex(try container.decode(ZIndexModifier.self))
             }
         }
         

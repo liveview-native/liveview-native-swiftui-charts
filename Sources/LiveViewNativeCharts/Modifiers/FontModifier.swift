@@ -10,15 +10,14 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct FontModifier: ContentModifier {
+@ASTDecodable("font")
+@MainActor
+struct FontModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = AxisMarkBuilder
     
-    static let name = "font"
+    private let font: Font.Resolvable
     
-    private let font: Font
-    
-    init(_ font: Font) {
+    init(_ font: Font.Resolvable) {
         self.font = font
     }
     
@@ -27,6 +26,6 @@ struct FontModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        content.font(font)
+        content.font(font.resolve(on: element, in: context))
     }
 }

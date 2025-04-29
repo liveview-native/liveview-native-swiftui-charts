@@ -9,16 +9,14 @@ import Charts
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct ZIndexModifier: ContentModifier {
+@ASTDecodable("zIndex")
+struct ZIndexModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
     
-    static let name = "zIndex"
-    
-    let value: Double
+    let value: Double.Resolvable
     
     @available(iOS 17, macOS 14, tvOS 17, watchOS 10, *)
-    init(_ value: Double) {
+    init(_ value: Double.Resolvable) {
         self.value = value
     }
     
@@ -28,7 +26,7 @@ struct ZIndexModifier: ContentModifier {
         in context: Builder.Context<R>
     ) -> Builder.Content {
         if #available(iOS 17, macOS 14, tvOS 17, watchOS 10, *) {
-            return content.zIndex(value)
+            return content.zIndex(value.resolve(on: element, in: context))
         } else {
             return content
         }

@@ -16,7 +16,7 @@ import LiveViewNativeCore
 /// * `normalized`
 /// * `center`
 /// * `unstacked`
-extension MarkStackingMethod: AttributeDecodable {
+extension MarkStackingMethod: @retroactive AttributeDecodable {
     public init(from attribute: LiveViewNativeCore.Attribute?) throws {
         guard let value = attribute?.value
         else { throw AttributeDecodingError.missingAttribute(Self.self) }

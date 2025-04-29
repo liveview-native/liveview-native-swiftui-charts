@@ -10,20 +10,19 @@ import SwiftUI
 import LiveViewNative
 import LiveViewNativeStylesheet
 
-@ParseableExpression
-struct ForegroundStyleModifier: ContentModifier {
+@ASTDecodable("foregroundStyle")
+@MainActor
+struct ForegroundStyleModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = ChartContentBuilder
     
-    static let name = "foregroundStyle"
-    
     enum Storage {
-        case primary(AnyShapeStyle.Resolvable)
+        case primary(StylesheetResolvableShapeStyle)
         case value(AnyPlottableValue)
     }
     
     let storage: Storage
     
-    init(_ primary: AnyShapeStyle.Resolvable) {
+    init(_ primary: StylesheetResolvableShapeStyle) {
         self.storage = .primary(primary)
     }
     
@@ -31,6 +30,7 @@ struct ForegroundStyleModifier: ContentModifier {
         self.storage = .value(value)
     }
     
+    @MainActor
     func apply<R: RootRegistry>(
         to content: Builder.Content,
         on element: ElementNode,
@@ -38,18 +38,20 @@ struct ForegroundStyleModifier: ContentModifier {
     ) -> Builder.Content {
         switch storage {
         case let .primary(primary):
-            return content.foregroundStyle(primary.resolve(on: element, in: context.context))
+            return content.foregroundStyle(primary.resolve(on: element, in: context))
         case let .value(value):
+            let resolvedPlottable = value.value.resolve(on: element, in: context).value
             return unbox(
                 content: content,
                 label: value.label,
-                value.value.resolve(on: element, in: context.context).value,
+                resolvedPlottable,
                 on: element,
                 in: context
             )
         }
     }
     
+    @MainActor
     func unbox<R: RootRegistry>(
         content: Builder.Content,
         label: AnyPlottableValue.Label,
@@ -66,15 +68,14 @@ struct ForegroundStyleModifier: ContentModifier {
     }
 }
 
-@ParseableExpression
-struct AxisMarkForegroundStyleModifier: ContentModifier {
+@ASTDecodable("foregroundStyle")
+@MainActor
+struct AxisMarkForegroundStyleModifier: ContentModifier, @preconcurrency Decodable {
     typealias Builder = AxisMarkBuilder
     
-    static let name = "foregroundStyle"
+    let primary: StylesheetResolvableShapeStyle
     
-    let primary: AnyShapeStyle.Resolvable
-    
-    init(_ primary: AnyShapeStyle.Resolvable) {
+    init(_ primary: StylesheetResolvableShapeStyle) {
         self.primary = primary
     }
     
@@ -83,6 +84,6 @@ struct AxisMarkForegroundStyleModifier: ContentModifier {
         on element: ElementNode,
         in context: Builder.Context<R>
     ) -> Builder.Content {
-        return content.foregroundStyle(primary.resolve(on: element, in: context.context))
+        return content.foregroundStyle(primary.resolve(on: element, in: context))
     }
 }

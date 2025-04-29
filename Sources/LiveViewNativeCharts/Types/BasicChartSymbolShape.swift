@@ -7,19 +7,39 @@
 
 import Charts
 import SwiftUI
+import LiveViewNative
 import LiveViewNativeStylesheet
 
-extension BasicChartSymbolShape: ParseableModifierValue {
-    public static func parser(in context: ParseableModifierContext) -> some Parser<Substring.UTF8View, Self> {
-        ImplicitStaticMember([
-            "circle": .circle,
-            "square": .square,
-            "triangle": .triangle,
-            "diamond": .diamond,
-            "pentagon": .pentagon,
-            "plus": .plus,
-            "cross": .cross,
-            "asterisk": .asterisk,
-        ])
+extension BasicChartSymbolShape {
+    enum Resolvable: Decodable, StylesheetResolvable {
+        case circle
+        case square
+        case triangle
+        case diamond
+        case pentagon
+        case plus
+        case cross
+        case asterisk
+        
+        func resolve<R>(on element: ElementNode, in context: LiveContext<R>) -> BasicChartSymbolShape where R : RootRegistry {
+            switch self {
+            case .circle:
+                return .circle
+            case .square:
+                return .square
+            case .triangle:
+                return .triangle
+            case .diamond:
+                return .diamond
+            case .pentagon:
+                return .pentagon
+            case .plus:
+                return .plus
+            case .cross:
+                return .cross
+            case .asterisk:
+                return .asterisk
+            }
+        }
     }
 }
